@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+.react-flow__handle {
+  opacity: 0;
+  width: 0px;
+  height: 0px;
+}
+
+.react-flow__edge-textbg {
+  stroke: black;
+  rx: 0;
+}
+
+.react-flow__node {
+  border-radius: 0;
+}
+
+.react-flow__panel {
+  display: flex;
+  gap: 10px;
+}
+
+.react-flow {
+  --xy-edge-stroke-default: #000;
+}
+
+.react-flow__handle-top {
+  top: 2px;
+}
+ 
+.react-flow__handle-bottom {
+  bottom: 2px;
+}
+ 
+.react-flow__handle-left {
+  left: 2px;
+}
+ 
+.react-flow__handle-right {
+  right: 2px;
+}
+
+.app__custom-edge {
+  position: absolute;
+  background: transparent;
+  padding: 10px;
+  font-size: 10pt;
+  font-weight: 700;
+}
+
+.app__custom-edge__box {
+  background: white;
+  padding: 4px;
+  border: 1px solid black;
+}

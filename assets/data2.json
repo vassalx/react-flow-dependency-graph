@@ -1,0 +1,426 @@
+{
+  "nodes": [
+    {
+      "id": "1",
+      "data": {
+        "label": "Plum Tree Capital",
+        "type": "person"
+      }
+    },
+    {
+      "id": "2",
+      "data": {
+        "label": "Aurora Tides",
+        "type": "person"
+      }
+    },
+    {
+      "id": "3",
+      "data": {
+        "label": "Swift Pine",
+        "type": "person"
+      }
+    },
+    {
+      "id": "4",
+      "width": 200,
+      "data": {
+        "label": "Maple Path",
+        "color": "#3397a6",
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "5",
+      "data": {
+        "label": "Meadow Owl",
+        "color": ["#2a4d5e", "#3397a6"],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "6",
+      "data": {
+        "label": "Nightfall Analytics",
+        "color": ["#2a4d5e", "#3397a6"],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "7",
+      "data": {
+        "label": "Indigo Flame",
+        "color": ["#2a4d5e", "#3397a6"],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "19",
+      "data": {
+        "label": "Mr. M. van der Kallen (12-09-1960)",
+        "type": "person"
+      }
+    },
+    {
+      "id": "8",
+      "data": {
+        "label": "Nimbus Valley",
+        "color": ["#2a4d5e", "#3397a6"],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "9",
+      "data": {
+        "label": "Titan Echo",
+        "color": ["#2a4d5e", "#3397a6"],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "10",
+      "data": {
+        "label": "Skyward Holdings",
+        "color": ["#2a4d5e", "#3397a6"],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "11",
+      "data": {
+        "label": "Horizon Finch",
+        "color": ["#2a4d5e", "#3397a6"],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "12",
+      "data": {
+        "label": "Whispering Willow",
+        "color": ["#2a4d5e", "#3397a6"],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "13",
+      "data": {
+        "label": "Phoenix Ridge",
+        "color": ["#2a4d5e", "#3397a6"],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "14",
+      "data": {
+        "label": "Pebble Bay Partners",
+        "color": ["#2a4d5e", "#3397a6"],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "15",
+      "data": {
+        "label": "Lunar Stone",
+        "color": ["#2a4d5e", "#3397a6"],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "16",
+      "width": 200,
+      "data": {
+        "label": "Redwood Wave",
+        "color": ["#2a4d5e", "#3397a6"],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "17",
+      "width": 150,
+      "data": {
+        "label": "Alpine Creek",
+        "color": ["#2a4d5e", "#3397a6"],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "18",
+      "width": 150,
+      "data": {
+        "label": "Mint Grove",
+        "color": ["#2a4d5e", "#3397a6"],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "23",
+      "data": {
+        "label": "Firelight Ventures",
+        "color": ["#2a4d5e", "#3397a6"],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "20",
+      "data": {
+        "label": "Grey Fox Group",
+        "color": ["#2a4d5e", "#3397a6"],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "21",
+      "data": {
+        "label": "Velvet Canyon",
+        "color": ["#2a4d5e", "#3397a6"],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "22",
+      "data": {
+        "label": "Pebble Creek",
+        "color": ["#2a4d5e", "#3397a6"],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "24",
+      "data": {
+        "label": "Sapphire Shore",
+        "color": ["#2a4d5e", "#3397a6"],
+        "textColor": "#fff"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1-4",
+      "source": "1",
+      "target": "4"
+    },
+    {
+      "id": "e2-4",
+      "source": "2",
+      "target": "4"
+    },
+    {
+      "id": "e3-4",
+      "source": "3",
+      "target": "4"
+    },
+    {
+      "id": "e4-5",
+      "source": "4",
+      "target": "5",
+      "data": {
+        "sourceLabel": "100%"
+      }
+    },
+    {
+      "id": "e5-6",
+      "source": "5",
+      "target": "6",
+      "data": {
+        "targetLabel": "95%"
+      }
+    },
+    {
+      "id": "e5-7",
+      "source": "5",
+      "target": "7",
+      "data": {
+        "targetLabel": "5%"
+      }
+    },
+    {
+      "id": "e6-8",
+      "source": "6",
+      "target": "8",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e6-10",
+      "source": "6",
+      "target": "10",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e19-7",
+      "source": "19",
+      "target": "7"
+    },
+    {
+      "id": "e6-9",
+      "source": "6",
+      "target": "9",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e10-11",
+      "source": "10",
+      "target": "11",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e10-12",
+      "source": "10",
+      "target": "12",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e10-13",
+      "source": "10",
+      "target": "13",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e10-14",
+      "source": "10",
+      "target": "14",
+      "data": {
+        "sourceLabel": "35%"
+      }
+    },
+    {
+      "id": "e6-15",
+      "source": "6",
+      "target": "15",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e6-16",
+      "source": "6",
+      "target": "16",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e16-14",
+      "source": "16",
+      "target": "14",
+      "data": {
+        "targetLabel": "20%"
+      }
+    },
+    {
+      "id": "e16-17",
+      "source": "16",
+      "target": "17",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e16-18",
+      "source": "16",
+      "target": "18",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e16-23",
+      "source": "16",
+      "target": "23",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e16-20",
+      "source": "16",
+      "target": "20",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e16-21",
+      "source": "16",
+      "target": "21",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e16-22",
+      "source": "16",
+      "target": "22",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e18-24",
+      "source": "18",
+      "target": "24",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e6-24",
+      "source": "6",
+      "target": "24",
+      "data": {
+        "lineType": "dashed"
+      }
+    },
+    {
+      "id": "e7-14",
+      "source": "7",
+      "target": "14",
+      "data": {
+        "lineType": "dotted"
+      }
+    },
+    {
+      "id": "e6-13",
+      "source": "6",
+      "target": "13",
+      "data": {
+        "lineType": "solid-dotted"
+      }
+    },
+    {
+      "id": "e7-12",
+      "source": "7",
+      "target": "12",
+      "data": {
+        "lineType": "dotted"
+      }
+    },
+    {
+      "id": "e7-11",
+      "source": "7",
+      "target": "11",
+      "data": {
+        "lineType": "dotted"
+      }
+    },
+    {
+      "id": "e5-9",
+      "source": "5",
+      "target": "9",
+      "data": {
+        "lineType": "dashed"
+      }
+    }
+  ]
+}

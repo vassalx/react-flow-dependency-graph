@@ -1,0 +1,550 @@
+{
+  "nodes": [
+    {
+      "id": "quantumfinch_capital_9523",
+      "data": {
+        "label": "QuantumFinch Capital"
+      }
+    },
+    {
+      "id": "stormlight_ventures_2535",
+      "data": {
+        "label": "Stormlight Ventures"
+      }
+    },
+    {
+      "id": "morningember_bv_3040",
+      "data": {
+        "label": "MorningEmber BV",
+        "color": [
+          "#2a4d5e",
+          "#3397a6"
+        ],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "auroratides_ltd_9490",
+      "data": {
+        "label": "AuroraTides Ltd",
+        "color": [
+          "#2a4d5e",
+          "#3397a6"
+        ],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "topazsystems_holdings_1741",
+      "data": {
+        "label": "TopazSystems Holdings",
+        "color": [
+          "#2a4d5e",
+          "#3397a6"
+        ],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "mistyvalley_nv_3525",
+      "data": {
+        "label": "MistyValley NV (EFN)",
+        "color": "#3397a6",
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "goldenvalley_holdings_2291",
+      "data": {
+        "label": "GoldenValley Holdings (EFM)",
+        "color": "#3397a6",
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "sapphireshore_capital_7759",
+      "data": {
+        "label": "SapphireShore Capital",
+        "color": [
+          "#2a4d5e",
+          "#3397a6"
+        ],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "quantumfinch_group_9663",
+      "data": {
+        "label": "QuantumFinch Group"
+      }
+    },
+    {
+      "id": "snowflakeharbor_ag_6495",
+      "data": {
+        "label": "SnowflakeHarbor AG"
+      }
+    },
+    {
+      "id": "northernsky_ventures_9063",
+      "data": {
+        "label": "NorthernSky Ventures"
+      }
+    },
+    {
+      "id": "blackbird_holdings_8386",
+      "data": {
+        "label": "Blackbird Holdings"
+      }
+    },
+    {
+      "id": "starlight_bv_7343",
+      "data": {
+        "label": "Starlight BV"
+      }
+    },
+    {
+      "id": "alpinecreek_ltd_8360",
+      "data": {
+        "label": "AlpineCreek Ltd"
+      }
+    },
+    {
+      "id": "glacialdawn_ag_4693",
+      "data": {
+        "label": "GlacialDawn AG"
+      }
+    },
+    {
+      "id": "echopoint_ag_6713",
+      "data": {
+        "label": "EchoPoint AG"
+      }
+    },
+    {
+      "id": "quantumfinch_holdings_6278",
+      "data": {
+        "label": "QuantumFinch Holdings"
+      }
+    },
+    {
+      "id": "birchtree_llc_3720",
+      "data": {
+        "label": "BirchTree LLC"
+      }
+    },
+    {
+      "id": "neonreef_bv_5097",
+      "data": {
+        "label": "NeonReef BV"
+      }
+    },
+    {
+      "id": "lunarstone_ag_2281",
+      "data": {
+        "label": "LunarStone AG"
+      }
+    },
+    {
+      "id": "indigosparrow_llc_2318",
+      "data": {
+        "label": "IndigoSparrow LLC"
+      }
+    },
+    {
+      "id": "blackbird_nv_3830",
+      "data": {
+        "label": "Blackbird NV"
+      }
+    },
+    {
+      "id": "clovergate_ltd_1861",
+      "data": {
+        "label": "CloverGate Ltd"
+      }
+    },
+    {
+      "id": "neonreef_holdings_5889",
+      "data": {
+        "label": "NeonReef Holdings"
+      }
+    },
+    {
+      "id": "violethill_capital_9411",
+      "data": {
+        "label": "VioletHill Capital (HOLDING)",
+        "color": "#3397a6",
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "quillpine_holdings_9552",
+      "data": {
+        "label": "QuillPine Holdings (WOUP)",
+        "color": [
+          "#2a4d5e",
+          "#3397a6"
+        ],
+        "textColor": "#fff"
+      }
+    },
+    {
+      "id": "skyward_capital_8214",
+      "data": {
+        "label": "Skyward Capital"
+      }
+    },
+    {
+      "id": "mapleleaf_nv_8270",
+      "data": {
+        "label": "MapleLeaf NV"
+      }
+    },
+    {
+      "id": "springtide_bv_6991",
+      "data": {
+        "label": "Springtide BV"
+      }
+    },
+    {
+      "id": "titanleaf_llc_8873",
+      "data": {
+        "label": "TitanLeaf LLC"
+      }
+    },
+    {
+      "id": "moonrise_systems_1565",
+      "data": {
+        "label": "Moonrise Systems"
+      }
+    },
+    {
+      "id": "arcticrose_ag_9163",
+      "data": {
+        "label": "ArcticRose AG"
+      }
+    },
+    {
+      "id": "violetfeather_llc_3527",
+      "data": {
+        "label": "VioletFeather LLC"
+      }
+    },
+    {
+      "id": "velvetcanyon_group_8981",
+      "data": {
+        "label": "VelvetCanyon Group"
+      }
+    },
+    {
+      "id": "lunarstone_ventures_5371",
+      "data": {
+        "label": "LunarStone Ventures"
+      }
+    },
+    {
+      "id": "horizonfinch_group_6354",
+      "data": {
+        "label": "HorizonFinch Group"
+      }
+    },
+    {
+      "id": "echopoint_capital_7530",
+      "data": {
+        "label": "EchoPoint Capital"
+      }
+    },
+    {
+      "id": "goldenfalcon_bv_7743",
+      "data": {
+        "label": "GoldenFalcon BV"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "quantumfinch_capital_9523",
+      "target": "mistyvalley_nv_3525",
+      "markerEnd": "dot",
+      "data": {
+        "sourceLabel": "100%"
+      }
+    },
+    {
+      "id": "e2",
+      "source": "quantumfinch_capital_9523",
+      "target": "stormlight_ventures_2535",
+      "markerEnd": "arrow",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e3",
+      "source": "stormlight_ventures_2535",
+      "target": "morningember_bv_3040",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e4",
+      "source": "mistyvalley_nv_3525",
+      "target": "morningember_bv_3040",
+      "data": {
+        "lineType": "dashed"
+      }
+    },
+    {
+      "id": "e5",
+      "source": "morningember_bv_3040",
+      "target": "auroratides_ltd_9490",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e6",
+      "source": "morningember_bv_3040",
+      "target": "topazsystems_holdings_1741",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e7",
+      "source": "mistyvalley_nv_3525",
+      "target": "goldenvalley_holdings_2291"
+    },
+    {
+      "id": "e8",
+      "source": "mistyvalley_nv_3525",
+      "target": "sapphireshore_capital_7759",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e9",
+      "source": "goldenvalley_holdings_2291",
+      "target": "snowflakeharbor_ag_6495",
+      "data": {
+        "targetLabel": "50%"
+      }
+    },
+    {
+      "id": "e10",
+      "source": "goldenvalley_holdings_2291",
+      "target": "quantumfinch_group_9663",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e11",
+      "source": "goldenvalley_holdings_2291",
+      "target": "northernsky_ventures_9063",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e12",
+      "source": "northernsky_ventures_9063",
+      "target": "blackbird_holdings_8386",
+      "data": {
+        "sourceLabel": "100%"
+      }
+    },
+    {
+      "id": "e13",
+      "source": "northernsky_ventures_9063",
+      "target": "starlight_bv_7343"
+    },
+    {
+      "id": "e14",
+      "source": "northernsky_ventures_9063",
+      "target": "alpinecreek_ltd_8360"
+    },
+    {
+      "id": "e15",
+      "source": "northernsky_ventures_9063",
+      "target": "glacialdawn_ag_4693"
+    },
+    {
+      "id": "e16",
+      "source": "northernsky_ventures_9063",
+      "target": "echopoint_ag_6713"
+    },
+    {
+      "id": "e17",
+      "source": "goldenvalley_holdings_2291",
+      "target": "quantumfinch_holdings_6278"
+    },
+    {
+      "id": "e18",
+      "source": "goldenvalley_holdings_2291",
+      "target": "birchtree_llc_3720",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e19",
+      "source": "goldenvalley_holdings_2291",
+      "target": "neonreef_bv_5097",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e20",
+      "source": "goldenvalley_holdings_2291",
+      "target": "lunarstone_ag_2281",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e21",
+      "source": "goldenvalley_holdings_2291",
+      "target": "clovergate_ltd_1861",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e22",
+      "source": "clovergate_ltd_1861",
+      "target": "neonreef_holdings_5889",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e23",
+      "source": "goldenvalley_holdings_2291",
+      "target": "violethill_capital_9411",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e24",
+      "source": "lunarstone_ag_2281",
+      "target": "indigosparrow_llc_2318",
+      "data": {
+        "sourceLabel": "100%"
+      }
+    },
+    {
+      "id": "e25",
+      "source": "lunarstone_ag_2281",
+      "target": "blackbird_nv_3830"
+    },
+    {
+      "id": "e26",
+      "source": "violethill_capital_9411",
+      "target": "quillpine_holdings_9552",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e27",
+      "source": "goldenvalley_holdings_2291",
+      "target": "skyward_capital_8214",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e28",
+      "source": "goldenvalley_holdings_2291",
+      "target": "arcticrose_ag_9163",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e29",
+      "source": "arcticrose_ag_9163",
+      "target": "violetfeather_llc_3527",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e30",
+      "source": "skyward_capital_8214",
+      "target": "mapleleaf_nv_8270",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e31",
+      "source": "skyward_capital_8214",
+      "target": "springtide_bv_6991",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e32",
+      "source": "skyward_capital_8214",
+      "target": "titanleaf_llc_8873",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e33",
+      "source": "skyward_capital_8214",
+      "target": "moonrise_systems_1565",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e34",
+      "source": "moonrise_systems_1565",
+      "target": "velvetcanyon_group_8981",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e35",
+      "source": "moonrise_systems_1565",
+      "target": "lunarstone_ventures_5371",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e36",
+      "source": "moonrise_systems_1565",
+      "target": "horizonfinch_group_6354",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e37",
+      "source": "moonrise_systems_1565",
+      "target": "echopoint_capital_7530",
+      "data": {
+        "targetLabel": "100%"
+      }
+    },
+    {
+      "id": "e38",
+      "source": "moonrise_systems_1565",
+      "target": "goldenfalcon_bv_7743",
+      "data": {
+        "targetLabel": "100%"
+      }
+    }
+  ]
+}
