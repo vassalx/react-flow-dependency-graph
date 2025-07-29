@@ -1,13 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CustomEdgeProps, CustomNodeProps, DiagramData } from "../common/types";
 import normalizeNodes from "../common/normalizeNodes";
 import normalizeEdges from "../common/normalizeEdges";
 
 const getButtonsMessage = "getButtons";
 
+interface Record {
+  name: string;
+  connection: string;
+}
+
 interface ButtonData {
-  objectName: string,
-  records: string[]
+  objectName: string;
+  records: Record[];
 }
 
 interface SelectExampleProps {
@@ -20,7 +25,7 @@ const SelectExample = (props: SelectExampleProps) => {
   >([]);
   const { onSelectExample } = props;
 
-  const getDependencyTree = (root: string, leaves: string[]): DiagramData => {
+  const getDependencyTree = (root: string, leaves: Record[]): DiagramData => {
     const result = {
       nodes: [
         {
@@ -38,13 +43,16 @@ const SelectExample = (props: SelectExampleProps) => {
         position: { x: 0, y: 0 },
         id: String(index),
         data: {
-          label: leaf,
+          label: leaf.name,
         },
       });
       result.edges.push({
         id: `root-${index}`,
         source: "root",
         target: String(index),
+        data: {
+          targetLabel: leaf.connection,
+        },
       });
     });
     return {
@@ -53,21 +61,36 @@ const SelectExample = (props: SelectExampleProps) => {
     };
   };
 
+  const hasHandledMessage = useRef(false);
+
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      if (event.data && event.data.data && event.data.action === getButtonsMessage) {
+      if (
+        event.data &&
+        event.data.data &&
+        event.data.action === getButtonsMessage &&
+        !hasHandledMessage.current
+      ) {
+        hasHandledMessage.current = true;
         const newExamples = event.data.data.map(
-          ({
-            objectName,
-            records,
-          }: ButtonData) => ({ name: objectName, data: getDependencyTree(objectName, records)})
+          ({ objectName, records }: ButtonData) => ({
+            name: objectName,
+            data: getDependencyTree(objectName, records),
+          })
         );
         setExamples(newExamples);
       }
     };
+
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
   }, []);
+
+  useEffect(() => {
+    if (examples.length) {
+      onSelectExample(examples[0].data);
+    }
+  }, [examples]);
 
   return (
     <>
