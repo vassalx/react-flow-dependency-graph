@@ -16,10 +16,14 @@ import { useEffect, useState } from "react";
 import { dataExample1 } from "../common/defaultData";
 import { DiagramData, edgeTypes, nodeTypes } from "../common/types";
 import DownloadButton from "./DownloadButton";
-import UploadButton from "./UploadButton";
+// import UploadButton from "./UploadButton";
 import SelectExample from "./SelectExample";
 import getElkLayout, { ElkDirectionType } from "../common/getElkLayout";
 import PositioningTools from "./PositionTools";
+// import normalizeNodes from "../common/normalizeNodes";
+// import normalizeEdges from "../common/normalizeEdges";
+
+// const FileUploadMessageAction = 'renderDiagram'
 
 const LayoutFlow = () => {
   const { setNodes, setEdges, getNodes, getEdges, fitView } = useReactFlow();
@@ -47,6 +51,21 @@ const LayoutFlow = () => {
     }
   }, [nodesInitialized, direction, fitView]);
 
+  // useEffect(() => {
+  //     const handleMessage = (event: MessageEvent) => {
+  //       console.log("1", event.data);
+  //         if (event.data && event.data.action === FileUploadMessageAction) {
+  //           console.log("nodes and edges", event.data.data);
+  //             handleSelectFile({
+  //               nodes: normalizeNodes(event.data.data.nodes),
+  //               edges: normalizeEdges(event.data.data.edges)
+  //             })
+  //         }
+  //     }
+  //     window.addEventListener('message', handleMessage);
+  //     return () => window.removeEventListener('message', handleMessage);
+  // }, []);
+
   return (
     <ReactFlow
       defaultNodes={dataExample1.nodes}
@@ -61,9 +80,11 @@ const LayoutFlow = () => {
       <Controls />
 
       <Panel position="top-left" className="mr-10">
-        <UploadButton handleFileUpload={handleSelectFile} />
-        <SelectExample onSelectExample={handleSelectFile} />
-        <DownloadButton />
+        <div className="w-full flex flex-wrap gap-2">
+          <DownloadButton />
+          {/* <UploadButton handleFileUpload={handleSelectFile} /> */}
+          <SelectExample onSelectExample={handleSelectFile} />
+        </div>
       </Panel>
       <Panel position="top-right">
         <PositioningTools

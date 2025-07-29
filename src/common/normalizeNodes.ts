@@ -13,7 +13,7 @@ const normalizeNodes = (nodes: CustomNodeProps[]): Node[] => {
       ...node.style,
       background: Array.isArray(node.data.color)
         ? getLinearGradientFromColorsArray(node.data.color)
-        : node.data.color,
+        : (node.data.color || "white"),
       color: node.data.textColor,
     },
   }));
