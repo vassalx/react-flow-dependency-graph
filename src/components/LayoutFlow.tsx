@@ -80,7 +80,7 @@ const LayoutFlow = () => {
       <Controls />
 
       <Panel position="top-left" className="mr-10">
-        <div className="w-full flex flex-wrap gap-2">
+        <div className="w-full flex flex-wrap gap-2 pr-32">
           <DownloadButton />
           {/* <UploadButton handleFileUpload={handleSelectFile} /> */}
           <SelectExample onSelectExample={handleSelectFile} />
