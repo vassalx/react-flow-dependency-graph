@@ -2,20 +2,20 @@
   "nodes": [
     {
       "id": "1",
-      "data": { "label": "Microsoft Corporation", "color": "yellow" }
+      "data": { "label": "Microsoft Corporation", "link": "https://www.microsoft.com/uk-ua/" }
     },
     { "id": "2", "data": { "label": "Satya Nadella - CEO", "type": "person" } },
 
     {
       "id": "3",
-      "data": { "label": "Azure (Cloud Services)", "color": "yellow" }
+      "data": { "label": "Azure (Cloud Services)" }
     },
     {
       "id": "3a",
       "data": { "label": "Scott Guthrie - EVP, Cloud & AI", "type": "person" }
     },
 
-    { "id": "4", "data": { "label": "Windows & Devices", "color": "yellow" } },
+    { "id": "4", "data": { "label": "Windows & Devices" } },
     {
       "id": "4a",
       "data": {
@@ -26,7 +26,7 @@
 
     {
       "id": "5",
-      "data": { "label": "Office & Productivity", "color": "yellow" }
+      "data": { "label": "Office & Productivity" }
     },
     {
       "id": "5a",
@@ -35,20 +35,20 @@
 
     {
       "id": "6",
-      "data": { "label": "Gaming (Xbox, Activision)", "color": "yellow" }
+      "data": { "label": "Gaming (Xbox, Activision)" }
     },
     {
       "id": "6a",
       "data": { "label": "Phil Spencer - CEO, Gaming", "type": "person" }
     },
 
-    { "id": "7", "data": { "label": "LinkedIn", "color": "yellow" } },
+    { "id": "7", "data": { "label": "LinkedIn", "link": "https://www.linkedin.com/feed/" } },
     {
       "id": "7a",
       "data": { "label": "Ryan Roslansky - CEO, LinkedIn", "type": "person" }
     },
 
-    { "id": "8", "data": { "label": "GitHub", "color": "yellow" } },
+    { "id": "8", "data": { "label": "GitHub", "link": "https://github.com/" } },
     {
       "id": "8a",
       "data": { "label": "Thomas Dohmke - CEO, GitHub", "type": "person" }

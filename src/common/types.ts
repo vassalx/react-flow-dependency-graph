@@ -22,6 +22,7 @@ export type CustomNodeProps = Node<
     label: string | ReactNode;
     color?: string | string[];
     textColor?: string;
+    link?: string;
   },
   "custom"
 >;

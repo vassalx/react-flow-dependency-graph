@@ -197,17 +197,26 @@
     {
       "id": "e1-4",
       "source": "1",
-      "target": "4"
+      "target": "4",
+      "data": {
+        "lineType": "dashed"
+      }
     },
     {
       "id": "e2-4",
       "source": "2",
-      "target": "4"
+      "target": "4",
+      "data": {
+        "lineType": "dotted"
+      }
     },
     {
       "id": "e3-4",
       "source": "3",
-      "target": "4"
+      "target": "4",
+      "data": {
+        "lineType": "solid-dotted"
+      }
     },
     {
       "id": "e4-5",

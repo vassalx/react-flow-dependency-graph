@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { CustomEdgeProps, CustomNodeProps, DiagramData } from "../common/types";
 import normalizeNodes from "../common/normalizeNodes";
 import normalizeEdges from "../common/normalizeEdges";
+import addColorsToNodes from "../common/addColorToNodex";
 
 const getButtonsMessage = "getButtons";
+const getRelatedAccounts = "getRelatedAccounts";
 
 interface Record {
   name: string;
@@ -65,20 +67,29 @@ const SelectExample = (props: SelectExampleProps) => {
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      if (
-        event.data &&
-        event.data.data &&
-        event.data.action === getButtonsMessage &&
-        !hasHandledMessage.current
-      ) {
-        hasHandledMessage.current = true;
-        const newExamples = event.data.data.map(
-          ({ objectName, records }: ButtonData) => ({
-            name: objectName,
-            data: getDependencyTree(objectName, records),
-          })
-        );
-        setExamples(newExamples);
+      if (event.data && event.data.data && !hasHandledMessage.current) {
+        if (event.data.action === getButtonsMessage) {
+          hasHandledMessage.current = true;
+          const newExamples = event.data.data.map(
+            ({ objectName, records }: ButtonData) => ({
+              name: objectName,
+              data: getDependencyTree(objectName, records),
+            })
+          );
+          setExamples(newExamples);
+        } else if (event.data.action === getRelatedAccounts) {
+          setExamples([
+            {
+              name: "Accounts",
+              data: {
+                nodes: normalizeNodes(
+                  addColorsToNodes(event.data.data.nodes, event.data.data.edges)
+                ),
+                edges: normalizeEdges(event.data.data.edges),
+              },
+            },
+          ]);
+        }
       }
     };
 

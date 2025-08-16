@@ -36,6 +36,19 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
         fontSize: 12,
       }}
     >
+      {data.link ? (
+        <a
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+          }}
+          target="_blank"
+          href={data.link}
+        >
+          ↗️
+        </a>
+      ) : null}
       {selected ? (
         <textarea
           className="block p-1 w-full text-sm bg-gray-50 rounded-sm border border-gray-300"

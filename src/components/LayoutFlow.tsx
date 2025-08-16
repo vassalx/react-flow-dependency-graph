@@ -16,19 +16,14 @@ import { useEffect, useState } from "react";
 import { dataExample1 } from "../common/defaultData";
 import { DiagramData, edgeTypes, nodeTypes } from "../common/types";
 import DownloadButton from "./DownloadButton";
-// import UploadButton from "./UploadButton";
 import SelectExample from "./SelectExample";
 import getElkLayout, { ElkDirectionType } from "../common/getElkLayout";
 import PositioningTools from "./PositionTools";
-// import normalizeNodes from "../common/normalizeNodes";
-// import normalizeEdges from "../common/normalizeEdges";
-
-// const FileUploadMessageAction = 'renderDiagram'
 
 const LayoutFlow = () => {
   const { setNodes, setEdges, getNodes, getEdges, fitView } = useReactFlow();
   const nodesInitialized = useNodesInitialized();
-  const [direction, setDirection] = useState<ElkDirectionType>("DOWN");
+  const [direction, setDirection] = useState<ElkDirectionType>("LEFT");
 
   const updateELKLayout = async (oldNodes: Node[], oldEdges: Edge[]) => {
     const { nodes, edges } = await getElkLayout(oldNodes, oldEdges, direction);
@@ -51,21 +46,6 @@ const LayoutFlow = () => {
     }
   }, [nodesInitialized, direction, fitView]);
 
-  // useEffect(() => {
-  //     const handleMessage = (event: MessageEvent) => {
-  //       console.log("1", event.data);
-  //         if (event.data && event.data.action === FileUploadMessageAction) {
-  //           console.log("nodes and edges", event.data.data);
-  //             handleSelectFile({
-  //               nodes: normalizeNodes(event.data.data.nodes),
-  //               edges: normalizeEdges(event.data.data.edges)
-  //             })
-  //         }
-  //     }
-  //     window.addEventListener('message', handleMessage);
-  //     return () => window.removeEventListener('message', handleMessage);
-  // }, []);
-
   return (
     <ReactFlow
       defaultNodes={dataExample1.nodes}
@@ -73,7 +53,7 @@ const LayoutFlow = () => {
       fitView
       nodeTypes={nodeTypes}
       edgeTypes={edgeTypes}
-      defaultEdgeOptions={{ type: "custom" }}
+      defaultEdgeOptions={{ type: "smart" }}
     >
       <Background />
       <MiniMap pannable zoomable />
@@ -82,7 +62,6 @@ const LayoutFlow = () => {
       <Panel position="top-left" className="mr-10">
         <div className="w-full flex flex-wrap gap-2 pr-32">
           <DownloadButton />
-          {/* <UploadButton handleFileUpload={handleSelectFile} /> */}
           <SelectExample onSelectExample={handleSelectFile} />
         </div>
       </Panel>

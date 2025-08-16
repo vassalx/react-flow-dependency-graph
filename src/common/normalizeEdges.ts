@@ -42,8 +42,25 @@ const getEdgeMarker = (
   return marker;
 };
 
+const removeDuplicateEdges = (edges: CustomEdgeProps[]): CustomEdgeProps[] => {
+  const seen = new Set();
+
+  return edges.filter(edge => {
+    // Create a sorted pair so direction doesn't matter
+    const nodePair = [edge.source, edge.target].sort().join('|');
+    const key = `${nodePair}|${edge.label}`;
+
+    if (seen.has(key)) {
+      return false; // duplicate
+    }
+
+    seen.add(key);
+    return true; // keep
+  });
+}
+
 const normalizeEdges = (edges: CustomEdgeProps[]): Edge[] => {
-  return edges.map((edge) => ({
+  return removeDuplicateEdges(edges).map((edge) => ({
     ...edge,
     markerEnd: edge.markerEnd && getEdgeMarker(edge.markerEnd),
     markerStart: edge.markerStart && getEdgeMarker(edge.markerStart),
