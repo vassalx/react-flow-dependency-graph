@@ -13,7 +13,6 @@ import {
 import "@xyflow/react/dist/style.css";
 
 import { useEffect, useState } from "react";
-import { dataExample1 } from "../common/defaultData";
 import { DiagramData, edgeTypes, nodeTypes } from "../common/types";
 import DownloadButton from "./DownloadButton";
 import SelectExample from "./SelectExample";
@@ -48,8 +47,8 @@ const LayoutFlow = () => {
 
   return (
     <ReactFlow
-      defaultNodes={dataExample1.nodes}
-      defaultEdges={dataExample1.edges}
+      defaultNodes={[]}
+      defaultEdges={[]}
       fitView
       nodeTypes={nodeTypes}
       edgeTypes={edgeTypes}
