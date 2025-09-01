@@ -13,7 +13,11 @@ import {
 import "@xyflow/react/dist/style.css";
 
 import { useEffect, useState } from "react";
-import { DiagramData, edgeTypes, nodeTypes } from "../common/types";
+import {
+  DiagramData,
+  edgeTypes,
+  nodeTypes,
+} from "../common/types";
 import DownloadButton from "./DownloadButton";
 import SelectExample from "./SelectExample";
 import getElkLayout, { ElkDirectionType } from "../common/getElkLayout";
@@ -71,10 +75,10 @@ const LayoutFlow = () => {
           onSelectDirection={(newDirection) => setDirection(newDirection)}
         />
       </Panel>
-      <div className="absolute bottom-4 left-4 flex gap-1">
-        <Controls style={{ position: "relative" }} />
+      <Panel position="bottom-left">
         <DiagramLegend />
-      </div>
+      </Panel>
+      <Controls className="bg-white" />
     </ReactFlow>
   );
 };
