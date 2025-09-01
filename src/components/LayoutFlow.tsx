@@ -18,6 +18,7 @@ import DownloadButton from "./DownloadButton";
 import SelectExample from "./SelectExample";
 import getElkLayout, { ElkDirectionType } from "../common/getElkLayout";
 import PositioningTools from "./PositionTools";
+import DiagramLegend from "./DiagramLegend";
 
 const LayoutFlow = () => {
   const { setNodes, setEdges, getNodes, getEdges, fitView } = useReactFlow();
@@ -55,9 +56,9 @@ const LayoutFlow = () => {
       defaultEdgeOptions={{ type: "smart" }}
     >
       <Background />
-      <MiniMap pannable zoomable />
-      <Controls />
-
+      <div className="hidden sm:block">
+        <MiniMap pannable zoomable />
+      </div>
       <Panel position="top-left" className="mr-10">
         <div className="w-full flex flex-wrap gap-2 pr-32">
           <DownloadButton />
@@ -70,6 +71,10 @@ const LayoutFlow = () => {
           onSelectDirection={(newDirection) => setDirection(newDirection)}
         />
       </Panel>
+      <div className="absolute bottom-4 left-4 flex gap-1">
+        <Controls style={{ position: "relative" }} />
+        <DiagramLegend />
+      </div>
     </ReactFlow>
   );
 };
