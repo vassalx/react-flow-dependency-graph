@@ -2,17 +2,11 @@ import { useReactFlow, getNodesBounds } from "@xyflow/react";
 import { toCanvas } from "html-to-image";
 import jsPDF from "jspdf";
 
-const exportWidth = 1920; // pixels per tile
-const exportHeight = 1280; // pixels per tile
-
 const DownloadButton = () => {
   const { getNodes } = useReactFlow();
 
   const onClick = async () => {
     const nodesBounds = getNodesBounds(getNodes());
-
-    const totalWidth = nodesBounds.width;
-    const totalHeight = nodesBounds.height;
 
     const viewElement = document.querySelector<HTMLElement>(
       ".react-flow__viewport"
@@ -20,62 +14,42 @@ const DownloadButton = () => {
     if (!viewElement) return;
 
     try {
+      const pdf = new jsPDF("l", "pt", "a4");
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      const totalWidth = nodesBounds.width;
+      const totalHeight = nodesBounds.height;
+
+      // Calculate a scaling factor to fit the diagram within a single page
+      const scaleX = pageWidth / totalWidth;
+      const scaleY = pageHeight / totalHeight;
+      const scale = Math.min(scaleX, scaleY);
+
+      const scaledWidth = totalWidth * scale;
+      const scaledHeight = totalHeight * scale;
+
       const canvas = await toCanvas(viewElement, {
         backgroundColor: "white",
+        // Only use the dimensions of the content for the canvas
         width: totalWidth,
         height: totalHeight,
         style: {
           width: `${totalWidth}px`,
           height: `${totalHeight}px`,
-          transform: `translate(${-nodesBounds.x}px, ${-nodesBounds.y}px) scale(1)`,
+          // Translate the canvas to the top-left corner of the nodes' bounding box
+          transform: `translate(${-nodesBounds.x}px, ${-nodesBounds.y}px)`,
           transformOrigin: "top left",
         },
       });
 
-      const pdf = new jsPDF("l", "pt", "a4");
-      const pageWidth = pdf.internal.pageSize.getWidth();
-
-      const scale = pageWidth / exportWidth;
-      const scaledHeight = exportHeight * scale;
-
-      const totalRows = Math.ceil(totalHeight/exportHeight);
-      const totalCols = Math.ceil(totalWidth/exportWidth);
-
-      const pageJobs: Promise<HTMLCanvasElement>[] = [];
-
-      for (let x = 0; x < totalCols; x++) {
-        for (let y = 0; y < totalRows; y++) {
-          const job = new Promise<HTMLCanvasElement>((resolve) => {
-            const pageCanvas = document.createElement("canvas");
-            pageCanvas.width = exportWidth;
-            pageCanvas.height = exportHeight;
-
-            const ctx = pageCanvas.getContext("2d");
-
-            if (ctx) {
-              ctx.fillStyle = "white";
-              ctx.fillRect(0, 0, exportWidth, exportHeight);
-              ctx.drawImage(canvas, -x * exportWidth, -y * exportHeight);
-            }
-
-            resolve(pageCanvas);
-          });
-
-          pageJobs.push(job);
-        }
-      }
-
-      const allImages = await Promise.all(pageJobs);
-
-      allImages.forEach((canvas, index) => {
-        if (index > 0) pdf.addPage();
-        pdf.addImage(canvas, 0, 0, pageWidth, scaledHeight);
-      });
+      // Add the single, correctly scaled image to the PDF
+      pdf.addImage(canvas.toDataURL("image/png"), 'PNG', 0, 0, scaledWidth, scaledHeight);
 
       pdf.save("diagram.pdf");
 
     } catch (err) {
-      console.error("Failed to generate multi-page PDF:", err);
+      console.error("Failed to generate PDF:", err);
     }
   };
 

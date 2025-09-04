@@ -57,7 +57,6 @@ const LayoutFlow = () => {
       fitView
       nodeTypes={nodeTypes}
       edgeTypes={edgeTypes}
-      defaultEdgeOptions={{ type: "smart" }}
     >
       <Background />
       <div className="hidden sm:block">
