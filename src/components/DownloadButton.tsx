@@ -5,6 +5,19 @@ import jsPDF from "jspdf";
 const DownloadButton = () => {
   const { getNodes } = useReactFlow();
 
+  const sendPdfToSalesforceAttachments = async (pdf: jsPDF) => {
+    const pdfBase64 = pdf.output("datauristring");
+
+    window.parent.postMessage(
+      {
+        type: "SAVE_PDF",
+        payload: pdfBase64,
+        fileName: "diagram.pdf",
+      },
+      "*"
+    );
+  }
+
   const onClick = async () => {
     const nodesBounds = getNodesBounds(getNodes());
 
@@ -44,7 +57,10 @@ const DownloadButton = () => {
       });
 
       // Add the single, correctly scaled image to the PDF
-      pdf.addImage(canvas.toDataURL("image/png"), 'PNG', 0, 0, scaledWidth, scaledHeight);
+      const imageData = canvas.toDataURL("image/jpeg", 0.75);
+      pdf.addImage(imageData, 'JPEG', 0, 0, scaledWidth, scaledHeight);
+
+      sendPdfToSalesforceAttachments(pdf);
 
       pdf.save("diagram.pdf");
 

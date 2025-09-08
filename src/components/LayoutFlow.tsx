@@ -5,9 +5,9 @@ import {
   MiniMap,
   Panel,
   useReactFlow,
-  useNodesInitialized,
   Edge,
   Node,
+  ReactFlowInstance,
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
@@ -24,10 +24,16 @@ import getElkLayout, { ElkDirectionType } from "../common/getElkLayout";
 import PositioningTools from "./PositionTools";
 import DiagramLegend from "./DiagramLegend";
 
+const localStorageDirKey = "dir_";
+
 const LayoutFlow = () => {
-  const { setNodes, setEdges, getNodes, getEdges, fitView } = useReactFlow();
-  const nodesInitialized = useNodesInitialized();
+  const { setNodes, setEdges, getNodes, setViewport } = useReactFlow();
   const [direction, setDirection] = useState<ElkDirectionType>("LEFT");
+  const [rfInstance, setRfInstance] = useState<ReactFlowInstance<
+    Node,
+    Edge
+  > | null>(null);
+  const [id, setId] = useState<string>("");
 
   const updateELKLayout = async (oldNodes: Node[], oldEdges: Edge[]) => {
     const { nodes, edges } = await getElkLayout(oldNodes, oldEdges, direction);
@@ -35,20 +41,60 @@ const LayoutFlow = () => {
     setEdges(edges);
   };
 
+  const equalNodesExceptPosition = (nodesA: Node[], nodesB: Node[]) => {
+    if (nodesA.length != nodesB.length) {
+      return false;
+    }
+
+    const normalize = (obj: Node) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { position, ...rest } = obj;
+      return rest;
+    };
+
+    const a1 = nodesA.map(normalize);
+    const a2 = nodesB.map(normalize);
+
+    return JSON.stringify(a1) === JSON.stringify(a2);
+  };
+
   const handleSelectFile = async (data: DiagramData) => {
-    await updateELKLayout(data.nodes, data.edges);
+    setId(data.id || "");
+    const flowData = data.id ? localStorage.getItem(data.id) : null;
+    const flow = flowData ? JSON.parse(flowData) : null;
+    if (flow && !equalNodesExceptPosition(flow.nodes, getNodes())) {
+      const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+      setNodes(flow.nodes);
+      setEdges(flow.edges);
+      setViewport({ x, y, zoom });
+      return;
+    } else {
+      await updateELKLayout(data.nodes, data.edges);
+    }
+  };
+
+  const onSave = () => {
+    if (rfInstance && id) {
+      const flow = rfInstance.toObject();
+      localStorage.setItem(id, JSON.stringify(flow));
+    }
   };
 
   useEffect(() => {
-    updateELKLayout(getNodes(), getEdges());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (id) {
+      const newDir = localStorage.getItem(localStorageDirKey + id);
+      if (newDir) {
+        setDirection(newDir as ElkDirectionType);
+      }
+    }
+  }, [id]);
 
   useEffect(() => {
-    if (nodesInitialized) {
-      window.requestAnimationFrame(() => fitView());
+    if (id) {
+      localStorage.setItem(localStorageDirKey + id, direction);
+      onSave();
     }
-  }, [nodesInitialized, direction, fitView]);
+  }, [direction]);
 
   return (
     <ReactFlow
@@ -57,6 +103,8 @@ const LayoutFlow = () => {
       fitView
       nodeTypes={nodeTypes}
       edgeTypes={edgeTypes}
+      onNodeDragStop={onSave}
+      onInit={setRfInstance}
     >
       <Background />
       <div className="hidden sm:block">
@@ -71,7 +119,9 @@ const LayoutFlow = () => {
       <Panel position="top-right">
         <PositioningTools
           selectedDirection={direction}
-          onSelectDirection={(newDirection) => setDirection(newDirection)}
+          onSelectDirection={(newDirection) => {
+            setDirection(newDirection);
+          }}
         />
       </Panel>
       <Panel position="bottom-left">

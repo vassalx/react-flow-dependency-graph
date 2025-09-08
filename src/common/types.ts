@@ -9,12 +9,14 @@ import {
 import CustomEdge from "../components/CustomEdge";
 import CustomNode from "../components/CustomNode";
 import { ReactNode } from "react";
+import SimpleFloatingEdge from "../components/SimpleFloatingEdge";
 
 export type EdgeLineType = "solid" | "dotted" | "dashed" | "solid-dotted";
 
 export interface DiagramData {
   edges: Edge[];
   nodes: Node[];
+  id?: string;
 }
 
 export type CustomNodeProps = Node<
@@ -38,6 +40,7 @@ export type CustomEdgeProps = Edge<
 
 export const edgeTypes = {
   custom: CustomEdge,
+  floating: SimpleFloatingEdge,
 } satisfies EdgeTypes;
 
 export const nodeTypes = {

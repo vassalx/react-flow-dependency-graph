@@ -46,7 +46,7 @@ const getElkLayout = async (
       },
       layoutOptions: {
         "layering.layerConstraint":
-          node.data.type === "person" ? "FIRST" : "",
+          (node.data && node.data.type === "person") ? "FIRST" : "",
       },
       width: 200,
     })),

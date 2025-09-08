@@ -86,6 +86,7 @@ const SelectExample = (props: SelectExampleProps) => {
                   addColorsToNodes(event.data.data.nodes, event.data.data.edges)
                 ),
                 edges: normalizeEdges(event.data.data.edges),
+                id: event.data.data.id
               },
             },
           ]);

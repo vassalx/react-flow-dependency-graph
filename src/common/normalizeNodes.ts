@@ -3,6 +3,16 @@ import getLinearGradientFromColorsArray from "./getLinearGradientFromColorsArray
 import { CustomNodeProps } from "./types";
 
 const normalizeNodes = (nodes: CustomNodeProps[]): Node[] => {
+  const getBackground = (node: CustomNodeProps) => {
+    if (!node.data) {
+      return "white";
+    }
+
+    if (Array.isArray(node.data.color)) {
+      return getLinearGradientFromColorsArray(node.data.color);
+    }
+    return node.data.color || "white";
+  };
   return nodes.map((node) => ({
     type: "custom",
     width: 150,
@@ -11,10 +21,8 @@ const normalizeNodes = (nodes: CustomNodeProps[]): Node[] => {
     position: node.position || { x: 0, y: 0 },
     style: {
       ...node.style,
-      background: Array.isArray(node.data.color)
-        ? getLinearGradientFromColorsArray(node.data.color)
-        : (node.data.color || "white"),
-      color: node.data.textColor,
+      background: getBackground(node),
+      color: node.data ? node.data.textColor : "black",
     },
   }));
 };
