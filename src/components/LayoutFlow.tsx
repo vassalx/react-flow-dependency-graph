@@ -27,7 +27,7 @@ import DiagramLegend from "./DiagramLegend";
 const localStorageDirKey = "dir_";
 
 const LayoutFlow = () => {
-  const { setNodes, setEdges, getNodes, setViewport } = useReactFlow();
+  const { setNodes, setEdges, setViewport } = useReactFlow();
   const [direction, setDirection] = useState<ElkDirectionType>("LEFT");
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance<
     Node,
@@ -41,19 +41,13 @@ const LayoutFlow = () => {
     setEdges(edges);
   };
 
-  const equalNodesExceptPosition = (nodesA: Node[], nodesB: Node[]) => {
+  const equalNodesData = (nodesA: Node[], nodesB: Node[]) => {
     if (nodesA.length != nodesB.length) {
       return false;
     }
 
-    const normalize = (obj: Node) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { position, ...rest } = obj;
-      return rest;
-    };
-
-    const a1 = nodesA.map(normalize);
-    const a2 = nodesB.map(normalize);
+    const a1 = nodesA.sort((a1, b1) => a1.id.localeCompare(b1.id)).map((node) => node.data);
+    const a2 = nodesB.sort((a1, b1) => a1.id.localeCompare(b1.id)).map((node) => node.data);
 
     return JSON.stringify(a1) === JSON.stringify(a2);
   };
@@ -62,7 +56,7 @@ const LayoutFlow = () => {
     setId(data.id || "");
     const flowData = data.id ? localStorage.getItem(data.id) : null;
     const flow = flowData ? JSON.parse(flowData) : null;
-    if (flow && !equalNodesExceptPosition(flow.nodes, getNodes())) {
+    if (flow && equalNodesData(flow.nodes, data.nodes)) {
       const { x = 0, y = 0, zoom = 1 } = flow.viewport;
       setNodes(flow.nodes);
       setEdges(flow.edges);
