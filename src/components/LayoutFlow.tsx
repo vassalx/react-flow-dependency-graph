@@ -13,11 +13,7 @@ import {
 import "@xyflow/react/dist/style.css";
 
 import { useEffect, useState } from "react";
-import {
-  DiagramData,
-  edgeTypes,
-  nodeTypes,
-} from "../common/types";
+import { DiagramData, edgeTypes, nodeTypes } from "../common/types";
 import DownloadButton from "./DownloadButton";
 import SelectExample from "./SelectExample";
 import getElkLayout, { ElkDirectionType } from "../common/getElkLayout";
@@ -46,8 +42,27 @@ const LayoutFlow = () => {
       return false;
     }
 
-    const a1 = nodesA.sort((a1, b1) => a1.id.localeCompare(b1.id)).map((node) => node.data);
-    const a2 = nodesB.sort((a1, b1) => a1.id.localeCompare(b1.id)).map((node) => node.data);
+    const a1 = nodesA
+      .sort((a1, b1) => a1.id.localeCompare(b1.id))
+      .map((node) => ({ id: node.id, data: node.data }));
+    const a2 = nodesB
+      .sort((a1, b1) => a1.id.localeCompare(b1.id))
+      .map((node) => ({ id: node.id, data: node.data }));
+
+    return JSON.stringify(a1) === JSON.stringify(a2);
+  };
+
+  const equalEdgesData = (edgesA: Edge[], edgesB: Edge[]) => {
+    if (edgesA.length != edgesB.length) {
+      return false;
+    }
+
+    const a1 = edgesA
+      .sort((a1, b1) => a1.id.localeCompare(b1.id))
+      .map((edge) => edge.data);
+    const a2 = edgesB
+      .sort((a1, b1) => a1.id.localeCompare(b1.id))
+      .map((edge) => edge.data);
 
     return JSON.stringify(a1) === JSON.stringify(a2);
   };
@@ -56,7 +71,7 @@ const LayoutFlow = () => {
     setId(data.id || "");
     const flowData = data.id ? localStorage.getItem(data.id) : null;
     const flow = flowData ? JSON.parse(flowData) : null;
-    if (flow && equalNodesData(flow.nodes, data.nodes)) {
+    if (flow && equalNodesData(flow.nodes, data.nodes) && equalEdgesData(flow.edges, data.edges)) {
       const { x = 0, y = 0, zoom = 1 } = flow.viewport;
       setNodes(flow.nodes);
       setEdges(flow.edges);
