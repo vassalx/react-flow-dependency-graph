@@ -114,6 +114,8 @@ const LayoutFlow = () => {
       edgeTypes={edgeTypes}
       onNodeDragStop={onSave}
       onInit={setRfInstance}
+      minZoom={0.05}
+      maxZoom={2}
     >
       <Background />
       <div className="hidden sm:block">
