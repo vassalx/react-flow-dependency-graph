@@ -24,8 +24,6 @@ function getParams(nodeA: any, nodeB: any) {
 }
  
 function getHandleCoordsByPosition(node: any) {
-  console.log(node.internals)
- 
   const x = node.internals.positionAbsolute.x + node.measured.width/2;
   const y = node.internals.positionAbsolute.y + node.measured.height/2;
  

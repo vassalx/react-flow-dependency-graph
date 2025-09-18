@@ -33,7 +33,6 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
       style={{
         minWidth: width,
         padding: 10,
-        border: data.selected ? "4px solid black" : "1px solid black",
         boxSizing: "border-box",
         textAlign: "center",
         fontSize: 12,

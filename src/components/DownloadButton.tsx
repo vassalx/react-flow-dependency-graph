@@ -2,6 +2,7 @@ import { useReactFlow, getNodesBounds } from "@xyflow/react";
 import { toCanvas } from "html-to-image";
 import jsPDF from "jspdf";
 import { useLoading } from "../context/LoadingContext";
+import { useEffect } from "react";
 
 interface DownloadButtonProps {
   id?: string;
@@ -71,12 +72,22 @@ const DownloadButton = ({ id }: DownloadButtonProps) => {
 
       // Download as file locally
       // pdf.save("diagram.pdf");
-      setIsLoading(false);
     } catch (err) {
       console.error("Failed to generate PDF:", err);
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data && event.data.action === "pdfSaved") {
+        setIsLoading(false);
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, []);
 
   return (
     <button
