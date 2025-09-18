@@ -83,10 +83,14 @@ const SelectExample = (props: SelectExampleProps) => {
               name: "Accounts",
               data: {
                 nodes: normalizeNodes(
-                  addColorsToNodes(event.data.data.nodes, event.data.data.edges)
+                  addColorsToNodes(
+                    event.data.data.nodes,
+                    event.data.data.creditGroups
+                  )
                 ),
+                legend: event.data.data.creditGroups,
                 edges: normalizeEdges(event.data.data.edges),
-                id: event.data.data.id
+                id: event.data.data.id,
               },
             },
           ]);
@@ -104,20 +108,21 @@ const SelectExample = (props: SelectExampleProps) => {
     }
   }, [examples]);
 
-  return (
-    <>
-      {examples.map((example, index) => (
-        <button
-          key={index}
-          type="button"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={() => onSelectExample(example.data)}
-        >
-          {example.name}
-        </button>
-      ))}
-    </>
-  );
+  // return (
+  //   <>
+  //     {examples.map((example, index) => (
+  //       <button
+  //         key={index}
+  //         type="button"
+  //         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+  //         onClick={() => onSelectExample(example.data)}
+  //       >
+  //         {example.name}
+  //       </button>
+  //     ))}
+  //   </>
+  // );
+  return null;
 };
 
 export default SelectExample;

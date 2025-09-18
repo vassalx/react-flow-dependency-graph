@@ -17,6 +17,7 @@ export interface DiagramData {
   edges: Edge[];
   nodes: Node[];
   id?: string;
+  legend?: { [key: string]: string };
 }
 
 export type CustomNodeProps = Node<
@@ -25,6 +26,8 @@ export type CustomNodeProps = Node<
     color?: string | string[];
     textColor?: string;
     id?: string;
+    group?: string;
+    selected?: boolean;
   },
   "custom"
 >;

@@ -19,6 +19,7 @@ import SelectExample from "./SelectExample";
 import getElkLayout, { ElkDirectionType } from "../common/getElkLayout";
 import PositioningTools from "./PositionTools";
 import DiagramLegend from "./DiagramLegend";
+import LoadingOverlay from "./LoadingOverlay";
 
 const localStorageDirKey = "dir_";
 
@@ -30,6 +31,7 @@ const LayoutFlow = () => {
     Edge
   > | null>(null);
   const [id, setId] = useState<string>("");
+  const [items, setItems] = useState<{ [key: string]: string }>({});
 
   const updateELKLayout = async (oldNodes: Node[], oldEdges: Edge[]) => {
     const { nodes, edges } = await getElkLayout(oldNodes, oldEdges, direction);
@@ -69,9 +71,14 @@ const LayoutFlow = () => {
 
   const handleSelectFile = async (data: DiagramData) => {
     setId(data.id || "");
+    setItems(data.legend || {});
     const flowData = data.id ? localStorage.getItem(data.id) : null;
     const flow = flowData ? JSON.parse(flowData) : null;
-    if (flow && equalNodesData(flow.nodes, data.nodes) && equalEdgesData(flow.edges, data.edges)) {
+    if (
+      flow &&
+      equalNodesData(flow.nodes, data.nodes) &&
+      equalEdgesData(flow.edges, data.edges)
+    ) {
       const { x = 0, y = 0, zoom = 1 } = flow.viewport;
       setNodes(flow.nodes);
       setEdges(flow.edges);
@@ -123,7 +130,7 @@ const LayoutFlow = () => {
       </div>
       <Panel position="top-left" className="mr-10">
         <div className="w-full flex flex-wrap gap-2 pr-32">
-          <DownloadButton />
+          <DownloadButton id={id} />
           <SelectExample onSelectExample={handleSelectFile} />
         </div>
       </Panel>
@@ -136,9 +143,10 @@ const LayoutFlow = () => {
         />
       </Panel>
       <Panel position="bottom-left">
-        <DiagramLegend />
+        <DiagramLegend items={items} />
       </Panel>
       <Controls className="bg-white" />
+      <LoadingOverlay />
     </ReactFlow>
   );
 };

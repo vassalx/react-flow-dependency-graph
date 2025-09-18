@@ -33,7 +33,7 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
       style={{
         minWidth: width,
         padding: 10,
-        border: "1px solid black",
+        border: data.selected ? "4px solid black" : "1px solid black",
         boxSizing: "border-box",
         textAlign: "center",
         fontSize: 12,
@@ -67,6 +67,7 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
           <Handle type="target" position={Position.Right} id="right" />
         ) : null}
       </>
+      {data.group ? <div className="font-bold">CG: {data.group}</div> : null}
     </div>
   );
 };
