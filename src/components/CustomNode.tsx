@@ -8,7 +8,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { CustomNodeProps } from "../common/types";
 
 const CustomNode = (props: NodeProps<CustomNodeProps>) => {
-  const { data, id, width, sourcePosition, targetPosition } = props;
+  const { data, id, sourcePosition, targetPosition } = props;
   const [label, setLabel] = useState<string | ReactNode>(data.label);
   const updateNodeInternals = useUpdateNodeInternals();
 
@@ -31,8 +31,6 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
   return (
     <div
       style={{
-        minWidth: width,
-        padding: 10,
         boxSizing: "border-box",
         textAlign: "center",
         fontSize: 12,

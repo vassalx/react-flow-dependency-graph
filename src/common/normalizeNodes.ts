@@ -24,9 +24,11 @@ const normalizeNodes = (nodes: CustomNodeProps[]): Node[] => {
       ...node.style,
       borderColor: getBorderColor(node),
       borderStyle: "solid",
-      borderWidth: node.data.selected ? 4 : 1,
+      borderWidth: node.data.selected ? 6 : 3,
       background: "white",
       color: node.data ? node.data.textColor : "black",
+      minWidth: node.width,
+      padding: 10,
     },
   }));
 };
