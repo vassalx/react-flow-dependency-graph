@@ -13,7 +13,11 @@ import {
 import "@xyflow/react/dist/style.css";
 
 import { useEffect, useState } from "react";
-import { DiagramData, edgeTypes, nodeTypes } from "../common/types";
+import {
+  DiagramData,
+  edgeTypes,
+  nodeTypes,
+} from "../common/types";
 import DownloadButton from "./DownloadButton";
 import SelectExample from "./SelectExample";
 import getElkLayout, { ElkDirectionType } from "../common/getElkLayout";
@@ -22,6 +26,7 @@ import DiagramLegend from "./DiagramLegend";
 import LoadingOverlay from "./LoadingOverlay";
 
 const localStorageDirKey = "dir_";
+const localStorageDraggableKey = "draggable"
 
 const LayoutFlow = () => {
   const { setNodes, setEdges, setViewport } = useReactFlow();
@@ -32,6 +37,9 @@ const LayoutFlow = () => {
   > | null>(null);
   const [id, setId] = useState<string>("");
   const [items, setItems] = useState<{ [key: string]: string }>({});
+  const [draggable, setDraggable] = useState<boolean>(
+    localStorage.getItem(localStorageDraggableKey) === "true"
+  );
 
   const updateELKLayout = async (oldNodes: Node[], oldEdges: Edge[]) => {
     const { nodes, edges } = await getElkLayout(oldNodes, oldEdges, direction);
@@ -123,6 +131,9 @@ const LayoutFlow = () => {
       onInit={setRfInstance}
       minZoom={0.05}
       maxZoom={2}
+      nodesDraggable={draggable}
+      nodesConnectable={draggable}
+      elementsSelectable={draggable}
     >
       <Background />
       <div className="hidden sm:block">
@@ -145,7 +156,13 @@ const LayoutFlow = () => {
       <Panel position="bottom-left">
         <DiagramLegend items={items} />
       </Panel>
-      <Controls className="bg-white" />
+      <Controls
+        className="bg-white"
+        onInteractiveChange={(status) => {
+          localStorage.setItem(localStorageDraggableKey, String(status));
+          setDraggable(status);
+        }}
+      />
       <LoadingOverlay />
     </ReactFlow>
   );
