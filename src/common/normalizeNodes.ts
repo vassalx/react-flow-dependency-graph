@@ -4,7 +4,6 @@ import { CustomNodeProps } from "./types";
 
 const normalizeNodes = (nodes: CustomNodeProps[]): Node[] => {
   const getBorderColor = (node: CustomNodeProps) => {
-    console.log(node.data.color);
     if (!node.data) {
       return "black";
     }
@@ -24,11 +23,12 @@ const normalizeNodes = (nodes: CustomNodeProps[]): Node[] => {
       ...node.style,
       borderColor: getBorderColor(node),
       borderStyle: "solid",
-      borderWidth: node.data.selected ? 6 : 3,
+      borderWidth: node.data.selected ? 6 : (node.data.type === 'Contact' ? 1 : 3),
       background: "white",
       color: node.data ? node.data.textColor : "black",
       minWidth: node.width,
       padding: 10,
+      borderRadius: node.data.type === 'Contact' ? 12 : 0,
     },
   }));
 };

@@ -28,6 +28,7 @@ export type CustomNodeProps = Node<
     id?: string;
     group?: string;
     selected?: boolean;
+    type?: string
   },
   "custom"
 >;
