@@ -38,6 +38,7 @@ export type CustomEdgeProps = Edge<
     sourceLabel?: string | ReactNode;
     targetLabel?: string | ReactNode;
     lineType?: EdgeLineType;
+    selected?: boolean;
   },
   "custom"
 >;

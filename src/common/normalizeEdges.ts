@@ -67,6 +67,7 @@ const normalizeEdges = (edges: CustomEdgeProps[]): Edge[] => {
     style: {
       ...edge.style,
       strokeDasharray: getStrokeDasharrayForEdgeLineType(edge.data?.lineType),
+      strokeWidth: 1.5,
     },
   }));
 };

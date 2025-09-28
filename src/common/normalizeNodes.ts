@@ -5,13 +5,18 @@ import { CustomNodeProps } from "./types";
 const normalizeNodes = (nodes: CustomNodeProps[]): Node[] => {
   const getBorderColor = (node: CustomNodeProps) => {
     if (!node.data) {
+      return "#ebebeb";
+    }
+
+    if (node.data.selected && !node.data.group) {
       return "black";
     }
 
     if (Array.isArray(node.data.color)) {
       return getLinearGradientFromColorsArray(node.data.color);
     }
-    return node.data.color || "black";
+
+    return node.data.color || "#ebebeb";
   };
   return nodes.map((node) => ({
     type: "custom",
@@ -23,12 +28,13 @@ const normalizeNodes = (nodes: CustomNodeProps[]): Node[] => {
       ...node.style,
       borderColor: getBorderColor(node),
       borderStyle: "solid",
-      borderWidth: node.data.selected ? 6 : (node.data.type === 'Contact' ? 1 : 3),
+      borderWidth: node.data.selected ? 3 : 1,
       background: "white",
       color: node.data ? node.data.textColor : "black",
       minWidth: node.width,
       padding: 10,
-      borderRadius: node.data.type === 'Contact' ? 12 : 0,
+      borderRadius: node.data.type === 'Contact' ? 32 : 8,
+      boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px"
     },
   }));
 };

@@ -22,49 +22,58 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
   }, [data.label]);
 
   const handleNodeClick = () => {
-    window.parent.postMessage(
-      { type: "OPEN_ACCOUNT", accountId: id },
-      "*"
-    );
+    window.parent.postMessage({ type: "OPEN_ACCOUNT", accountId: id }, "*");
   };
 
   return (
     <div
       style={{
         boxSizing: "border-box",
-        textAlign: "center",
+        textAlign: "left",
         fontSize: 12,
       }}
       onClick={handleNodeClick}
     >
-      {label}
-      <>
-        {sourcePosition === "bottom" ? (
-          <Handle type="source" position={Position.Bottom} id="bottom" />
+      <div className="flex items-center">
+        {data.type === "Contact" ? (
+          <div className="flex items-center justify-center rounded-full bg-gray-200 w-[36px] h-[36px] flex-none mr-2">
+            <span className="material-symbols-outlined">person</span>
+          </div>
         ) : null}
-        {targetPosition === "bottom" ? (
-          <Handle type="target" position={Position.Bottom} id="bottom" />
-        ) : null}
-        {sourcePosition === "left" ? (
-          <Handle type="source" position={Position.Left} id="left" />
-        ) : null}
-        {targetPosition === "left" ? (
-          <Handle type="target" position={Position.Left} id="left" />
-        ) : null}
-        {sourcePosition === "top" ? (
-          <Handle type="source" position={Position.Top} id="top" />
-        ) : null}
-        {targetPosition === "top" ? (
-          <Handle type="target" position={Position.Top} id="top" />
-        ) : null}
-        {sourcePosition === "right" ? (
-          <Handle type="source" position={Position.Right} id="right" />
-        ) : null}
-        {targetPosition === "right" ? (
-          <Handle type="target" position={Position.Right} id="right" />
-        ) : null}
-      </>
-      {data.group ? <div className="font-bold">CG: {data.group}</div> : null}
+
+        <div className="flex flex-col flex-1">
+          {label}
+          <>
+            {sourcePosition === "bottom" ? (
+              <Handle type="source" position={Position.Bottom} id="bottom" />
+            ) : null}
+            {targetPosition === "bottom" ? (
+              <Handle type="target" position={Position.Bottom} id="bottom" />
+            ) : null}
+            {sourcePosition === "left" ? (
+              <Handle type="source" position={Position.Left} id="left" />
+            ) : null}
+            {targetPosition === "left" ? (
+              <Handle type="target" position={Position.Left} id="left" />
+            ) : null}
+            {sourcePosition === "top" ? (
+              <Handle type="source" position={Position.Top} id="top" />
+            ) : null}
+            {targetPosition === "top" ? (
+              <Handle type="target" position={Position.Top} id="top" />
+            ) : null}
+            {sourcePosition === "right" ? (
+              <Handle type="source" position={Position.Right} id="right" />
+            ) : null}
+            {targetPosition === "right" ? (
+              <Handle type="target" position={Position.Right} id="right" />
+            ) : null}
+          </>
+          {data.group ? (
+            <div className="font-bold text-gray-500">CG: {data.group}</div>
+          ) : null}
+        </div>
+      </div>
     </div>
   );
 };
