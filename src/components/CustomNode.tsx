@@ -6,6 +6,7 @@ import {
 } from "@xyflow/react";
 import { ReactNode, useEffect, useState } from "react";
 import { CustomNodeProps } from "../common/types";
+import UserIcon from "./icons/UserIcon";
 
 const CustomNode = (props: NodeProps<CustomNodeProps>) => {
   const { data, id, sourcePosition, targetPosition } = props;
@@ -36,8 +37,8 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
     >
       <div className="flex items-center">
         {data.type === "Contact" ? (
-          <div className="flex items-center justify-center rounded-full bg-gray-200 w-[36px] h-[36px] flex-none mr-2">
-            <span className="material-symbols-outlined">person</span>
+          <div className="flex items-center justify-center rounded-full bg-gray-200 w-[36px] h-[36px] flex-none mr-2 text-lg">
+            <UserIcon />
           </div>
         ) : null}
 
