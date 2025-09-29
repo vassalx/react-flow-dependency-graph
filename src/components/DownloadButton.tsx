@@ -3,6 +3,8 @@ import { toCanvas } from "html-to-image";
 import jsPDF from "jspdf";
 import { useLoading } from "../context/LoadingContext";
 import { useEffect } from "react";
+import { CustomButton } from "./CustomButton";
+import { DownloadIcon } from "./icons/DownloadIcon";
 
 interface DownloadButtonProps {
   id?: string;
@@ -90,17 +92,17 @@ const DownloadButton = ({ id }: DownloadButtonProps) => {
   }, []);
 
   return (
-    <button
-      className={`bg-green-500 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md flex justify-center`}
+    <CustomButton
+      label="Save as PDF"
+      color="green"
+      icon={<DownloadIcon />}
       onClick={() => {
         setIsLoading(true);
         setTimeout(() => {
           handleClick();
         }, 100);
       }}
-    >
-      <span>Save as PDF</span>
-    </button>
+    />
   );
 };
 
