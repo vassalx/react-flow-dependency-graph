@@ -14,6 +14,8 @@ import "@xyflow/react/dist/style.css";
 
 import { useEffect, useState } from "react";
 import {
+  CustomEdgeProps,
+  CustomNodeProps,
   DiagramData,
   edgeTypes,
   nodeTypes,
@@ -29,6 +31,9 @@ import { SaveIcon } from "./icons/SaveIcon";
 import toast from "react-hot-toast";
 import RevertArrowIcon from "./icons/RevertArrowIcon";
 import ClockwiseArrowIcon from "./icons/ClockwiseArrowIcon";
+import normalizeNodes from "../common/normalizeNodes";
+import normalizeEdges from "../common/normalizeEdges";
+import addColorsToNodes from "../common/addColorToNodex";
 
 const localStorageDirKey = "dir_";
 const localStorageDraggableKey = "draggable";
@@ -36,7 +41,9 @@ const localStorageRestoreKey = "restore_";
 const localStorageVersionKey = "version_";
 
 const LayoutFlow = () => {
-  const [versions, setVersions] = useState<{ key: string; date: string }[]>([]);
+  const [versions, setVersions] = useState<
+    { key: string; date: string; name: string }[]
+  >([]);
   const [version, setVersion] = useState<string>("");
   const { setNodes, setEdges, setViewport } = useReactFlow();
   const [direction, setDirection] = useState<ElkDirectionType>("LEFT");
@@ -138,149 +145,149 @@ const LayoutFlow = () => {
     }
   }, [direction]);
 
-  // useEffect(() => {
-  //   const edges = [
-  //     {
-  //       id: "e1",
-  //       source: "2",
-  //       target: "1",
-  //       label: "CEO of",
-  //       data: { lineType: "dashed" },
-  //     },
+  useEffect(() => {
+    const edges = [
+      {
+        id: "e1",
+        source: "2",
+        target: "1",
+        label: "CEO of",
+        data: { lineType: "dashed" },
+      },
 
-  //     {
-  //       id: "e2",
-  //       source: "3a",
-  //       target: "3",
-  //       label: "Leads",
-  //       data: { lineType: "dashed" },
-  //     },
-  //     {
-  //       id: "e3",
-  //       source: "4a",
-  //       target: "4",
-  //       label: "Leads",
-  //       data: { lineType: "dashed" },
-  //     },
-  //     {
-  //       id: "e4",
-  //       source: "5a",
-  //       target: "5",
-  //       label: "Leads",
-  //       data: { lineType: "dashed" },
-  //     },
-  //     {
-  //       id: "e5",
-  //       source: "6a",
-  //       target: "6",
-  //       label: "Leads",
-  //       data: { lineType: "dashed" },
-  //     },
-  //     {
-  //       id: "e6",
-  //       source: "7a",
-  //       target: "7",
-  //       label: "CEO of",
-  //       data: { lineType: "dashed" },
-  //     },
-  //     {
-  //       id: "e7",
-  //       source: "8a",
-  //       target: "8",
-  //       label: "CEO of",
-  //       data: { lineType: "dashed" },
-  //     },
+      {
+        id: "e2",
+        source: "3a",
+        target: "3",
+        label: "Leads",
+        data: { lineType: "dashed" },
+      },
+      {
+        id: "e3",
+        source: "4a",
+        target: "4",
+        label: "Leads",
+        data: { lineType: "dashed" },
+      },
+      {
+        id: "e4",
+        source: "5a",
+        target: "5",
+        label: "Leads",
+        data: { lineType: "dashed" },
+      },
+      {
+        id: "e5",
+        source: "6a",
+        target: "6",
+        label: "Leads",
+        data: { lineType: "dashed" },
+      },
+      {
+        id: "e6",
+        source: "7a",
+        target: "7",
+        label: "CEO of",
+        data: { lineType: "dashed" },
+      },
+      {
+        id: "e7",
+        source: "8a",
+        target: "8",
+        label: "CEO of",
+        data: { lineType: "dashed" },
+      },
 
-  //     { id: "e8", source: "1", target: "3" },
-  //     { id: "e9", source: "1", target: "4" },
-  //     { id: "e10", source: "1", target: "5" },
-  //     { id: "e11", source: "1", target: "6" },
-  //     { id: "e12", source: "1", target: "7" },
-  //     { id: "e13", source: "1", target: "8" },
-  //   ] as CustomEdgeProps[];
-  //   const nodes = [
-  //     {
-  //       id: "1",
-  //       data: {
-  //         label: "Microsoft Corporation",
-  //         link: "https://www.microsoft.com/uk-ua/",
-  //         group: "1",
-  //       },
-  //     },
-  //     { id: "2", data: { label: "Satya Nadella - CEO", type: "Contact" } },
+      { id: "e8", source: "1", target: "3" },
+      { id: "e9", source: "1", target: "4" },
+      { id: "e10", source: "1", target: "5" },
+      { id: "e11", source: "1", target: "6" },
+      { id: "e12", source: "1", target: "7" },
+      { id: "e13", source: "1", target: "8" },
+    ] as CustomEdgeProps[];
+    const nodes = [
+      {
+        id: "1",
+        data: {
+          label: "Microsoft Corporation",
+          link: "https://www.microsoft.com/uk-ua/",
+          group: "1",
+        },
+      },
+      { id: "2", data: { label: "Satya Nadella - CEO", type: "Contact" } },
 
-  //     {
-  //       id: "3",
-  //       data: { label: "Azure (Cloud Services)", group: "1", selected: true },
-  //     },
-  //     {
-  //       id: "3a",
-  //       data: { label: "Scott Guthrie - EVP, Cloud & AI", type: "Contact" },
-  //     },
+      {
+        id: "3",
+        data: { label: "Azure (Cloud Services)", group: "1", selected: true },
+      },
+      {
+        id: "3a",
+        data: { label: "Scott Guthrie - EVP, Cloud & AI", type: "Contact" },
+      },
 
-  //     { id: "4", data: { label: "Windows & Devices" } },
-  //     {
-  //       id: "4a",
-  //       data: {
-  //         label: "Panos Panay - EVP, Windows & Devices",
-  //         type: "Contact",
-  //       },
-  //     },
+      { id: "4", data: { label: "Windows & Devices" } },
+      {
+        id: "4a",
+        data: {
+          label: "Panos Panay - EVP, Windows & Devices",
+          type: "Contact",
+        },
+      },
 
-  //     {
-  //       id: "5",
-  //       data: { label: "Office & Productivity" },
-  //     },
-  //     {
-  //       id: "5a",
-  //       data: { label: "Rajesh Jha - EVP, Office & Teams", type: "Contact" },
-  //     },
+      {
+        id: "5",
+        data: { label: "Office & Productivity" },
+      },
+      {
+        id: "5a",
+        data: { label: "Rajesh Jha - EVP, Office & Teams", type: "Contact" },
+      },
 
-  //     {
-  //       id: "6",
-  //       data: { label: "Gaming (Xbox, Activision)" },
-  //     },
-  //     {
-  //       id: "6a",
-  //       data: { label: "Phil Spencer - CEO, Gaming", type: "Contact" },
-  //     },
+      {
+        id: "6",
+        data: { label: "Gaming (Xbox, Activision)" },
+      },
+      {
+        id: "6a",
+        data: { label: "Phil Spencer - CEO, Gaming", type: "Contact" },
+      },
 
-  //     {
-  //       id: "7",
-  //       data: {
-  //         label: "LinkedIn",
-  //         link: "https://www.linkedin.com/feed/",
-  //         group: "1",
-  //       },
-  //     },
-  //     {
-  //       id: "7a",
-  //       data: { label: "Ryan Roslansky - CEO, LinkedIn", type: "Contact" },
-  //     },
-  //     {
-  //       id: "8",
-  //       data: { label: "GitHub", link: "https://github.com/", group: "1" },
-  //     },
-  //     {
-  //       id: "8a",
-  //       data: { label: "Thomas Dohmke - CEO, GitHub", type: "Contact" },
-  //     },
-  //   ] as CustomNodeProps[];
-  //   setTimeout(() => {
-  //     handleSelectFile({
-  //       edges: normalizeEdges(edges),
-  //       nodes: normalizeNodes(
-  //         addColorsToNodes(nodes, {
-  //           "1": "blue",
-  //         })
-  //       ),
-  //       id: "1",
-  //       legend: {
-  //         "1": "blue",
-  //       },
-  //     });
-  //   }, 1000);
-  // }, []);
+      {
+        id: "7",
+        data: {
+          label: "LinkedIn",
+          link: "https://www.linkedin.com/feed/",
+          group: "1",
+        },
+      },
+      {
+        id: "7a",
+        data: { label: "Ryan Roslansky - CEO, LinkedIn", type: "Contact" },
+      },
+      {
+        id: "8",
+        data: { label: "GitHub", link: "https://github.com/", group: "1" },
+      },
+      {
+        id: "8a",
+        data: { label: "Thomas Dohmke - CEO, GitHub", type: "Contact" },
+      },
+    ] as CustomNodeProps[];
+    setTimeout(() => {
+      handleSelectFile({
+        edges: normalizeEdges(edges),
+        nodes: normalizeNodes(
+          addColorsToNodes(nodes, {
+            "1": "blue",
+          })
+        ),
+        id: "1",
+        legend: {
+          "1": "blue",
+        },
+      });
+    }, 1000);
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -291,8 +298,8 @@ const LayoutFlow = () => {
         key.startsWith(keyBeginsWith)
       );
       const versionList = allKeys.map((key) => {
-        const date = key.replace(keyBeginsWith, "");
-        return { key, date };
+        const { date, name } = JSON.parse(localStorage.getItem(key) || '{}');
+        return { key, date, name };
       });
       setVersions(
         versionList.sort((a, b) => (a.date < b.date ? 1 : -1)).slice(0, 20)
@@ -304,15 +311,23 @@ const LayoutFlow = () => {
     if (rfInstance && id) {
       const flow = rfInstance.toObject();
       const timestamp = new Date().toISOString();
+      const name =
+        prompt(
+          "Enter version name (optional):",
+          new Date(timestamp).toLocaleString()
+        ) || new Date(timestamp).toLocaleString();
       const versionKey = `${localStorageRestoreKey}${localStorageVersionKey}${id}_${timestamp}`;
-      let updatedVersions = [{ key: versionKey, date: timestamp }, ...versions];
+      let updatedVersions = [
+        { key: versionKey, date: timestamp, name: name },
+        ...versions,
+      ];
       if (updatedVersions.length > 20) {
         // Remove the oldest version
         const oldest = updatedVersions[updatedVersions.length - 1];
         localStorage.removeItem(oldest.key);
         updatedVersions = updatedVersions.slice(0, 20);
       }
-      localStorage.setItem(versionKey, JSON.stringify(flow));
+      localStorage.setItem(versionKey, JSON.stringify({ flow, name }));
       setVersions(updatedVersions);
       toast.success("Version saved!");
     }
@@ -324,7 +339,7 @@ const LayoutFlow = () => {
     const flowStr = localStorage.getItem(versionKey);
     if (flowStr) {
       setVersion(versionKey.replace(keyBeginsWith, ""));
-      const flow = JSON.parse(flowStr);
+      const { flow } = JSON.parse(flowStr);
       const { x = 0, y = 0, zoom = 1 } = flow.viewport;
       setNodes(flow.nodes || []);
       setEdges(flow.edges || []);
@@ -473,7 +488,7 @@ const LayoutFlow = () => {
               <option value="">Restore version...</option>
               {versions.map((v) => (
                 <option key={v.key} value={v.key}>
-                  {new Date(v.date).toLocaleString()}
+                  {v.name || new Date(v.date).toLocaleString()}
                 </option>
               ))}
             </select>
