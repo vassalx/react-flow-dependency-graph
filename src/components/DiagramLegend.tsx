@@ -11,10 +11,13 @@ export default function DiagramLegend({ items }: DiagramLegendProps) {
         <span className="text-gray-700">Current selected Account</span>
       </div>
       {Object.keys(items).map((key) => (
-        <div className="p-2 rounded-xl border border-dashed bg-gray-100 flex-auto" style={{
-          borderColor: items[key],
-          color: items[key],
-        }}>
+        <div
+          className="p-2 rounded-xl border border-dashed bg-gray-100 flex-auto"
+          style={{
+            borderColor: items[key],
+            color: items[key],
+          }}
+        >
           Credit Group №{key}
         </div>
       ))}
