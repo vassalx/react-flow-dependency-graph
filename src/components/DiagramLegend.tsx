@@ -11,7 +11,7 @@ export default function DiagramLegend({ items }: DiagramLegendProps) {
         <span className="text-sm text-gray-700">Current selected Account</span>
       </div>
       {Object.keys(items).map((key) => (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2" key={key}>
           <span
             className="w-4 h-4 rounded-full bg-yellow-400"
             style={{ backgroundColor: items[key] }}
