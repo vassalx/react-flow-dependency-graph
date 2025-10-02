@@ -373,6 +373,7 @@ const LayoutFlow = () => {
   const handleUndo = () => {
     if (undoStack.length === 0 || !rfInstance) return;
     const prevState = undoStack[undoStack.length - 1];
+    setLastUndoState(prevState);
     setUndoStack((prev) => prev.slice(0, -1));
     setRedoStack((prev) => [
       ...prev,
