@@ -32,8 +32,8 @@ import toast from "react-hot-toast";
 import RevertArrowIcon from "./icons/RevertArrowIcon";
 import ClockwiseArrowIcon from "./icons/ClockwiseArrowIcon";
 import normalizeEdges from "../common/normalizeEdges";
-import addColorsToNodes from "../common/addColorToNodex";
 import normalizeNodes from "../common/normalizeNodes";
+import addColorsToNodes from "../common/addColorToNodex";
 
 const localStorageDirKey = "dir_";
 const localStorageDraggableKey = "draggable";
@@ -59,6 +59,7 @@ const LayoutFlow = () => {
     const { nodes, edges } = await getElkLayout(oldNodes, oldEdges, direction);
     setNodes(nodes);
     setEdges(edges);
+    return { nodes, edges };
   };
 
   const equalNodesData = (nodesA: Node[], nodesB: Node[]) => {
@@ -107,7 +108,15 @@ const LayoutFlow = () => {
       setViewport({ x, y, zoom });
       return;
     } else {
-      await updateELKLayout(data.nodes, data.edges);
+      const { nodes, edges } = await updateELKLayout(data.nodes, data.edges);
+      console.log("SAVING NEW FLOW", nodes, edges);
+      setUndoStack([]);
+      setRedoStack([]);
+      setLastUndoState({
+        nodes: nodes || [],
+        edges: edges || [],
+        viewport: { x: 0, y: 0, zoom: 1 },
+      });
     }
   };
 
