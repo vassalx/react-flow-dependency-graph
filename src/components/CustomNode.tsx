@@ -6,6 +6,7 @@ import {
 } from "@xyflow/react";
 import { ReactNode, useEffect, useState } from "react";
 import { CustomNodeProps } from "../common/types";
+import getLinearGradientFromColorsArray from "../common/getLinearGradientFromColorsArray";
 
 const CustomNode = (props: NodeProps<CustomNodeProps>) => {
   const { data, id, sourcePosition, targetPosition } = props;
@@ -22,10 +23,18 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
   }, [data.label]);
 
   const handleNodeClick = () => {
-    window.parent.postMessage(
-      { type: "OPEN_ACCOUNT", accountId: id },
-      "*"
-    );
+    window.parent.postMessage({ type: "OPEN_ACCOUNT", accountId: id }, "*");
+  };
+
+    const getBorderColor = (node: NodeProps<CustomNodeProps>) => {
+    if (!node.data) {
+      return "black";
+    }
+
+    if (Array.isArray(node.data.color)) {
+      return getLinearGradientFromColorsArray(node.data.color);
+    }
+    return node.data.color || "black";
   };
 
   return (
@@ -34,6 +43,18 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
         boxSizing: "border-box",
         textAlign: "center",
         fontSize: 12,
+        borderColor: getBorderColor(props),
+        borderStyle: "solid",
+        borderWidth: props.data.selected
+          ? 6
+          : props.data.type === "Contact"
+          ? 1
+          : 3,
+        background: "white",
+        color: props.data ? props.data.textColor : "black",
+        minWidth: props.width,
+        padding: 10,
+        borderRadius: props.data.type === "Contact" ? 12 : 0,
       }}
       onClick={handleNodeClick}
     >

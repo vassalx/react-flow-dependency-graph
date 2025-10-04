@@ -31,9 +31,9 @@ import { SaveIcon } from "./icons/SaveIcon";
 import toast from "react-hot-toast";
 import RevertArrowIcon from "./icons/RevertArrowIcon";
 import ClockwiseArrowIcon from "./icons/ClockwiseArrowIcon";
+import addColorsToNodes from "../common/addColorToNodex";
 import normalizeNodes from "../common/normalizeNodes";
 import normalizeEdges from "../common/normalizeEdges";
-import addColorsToNodes from "../common/addColorToNodex";
 
 const localStorageDirKey = "dir_";
 const localStorageDraggableKey = "draggable";
@@ -117,7 +117,6 @@ const LayoutFlow = () => {
       setLastUndoState({
         nodes: nodes || [],
         edges: edges || [],
-        viewport: { x: 0, y: 0, zoom: 1 },
       });
     }
   };
@@ -351,7 +350,6 @@ const LayoutFlow = () => {
   type FlowState = {
     nodes: Node[];
     edges: Edge[];
-    viewport: { x: number; y: number; zoom: number };
   };
 
   const [undoStack, setUndoStack] = useState<FlowState[]>([]);
@@ -366,8 +364,7 @@ const LayoutFlow = () => {
       setRedoStack([]);
       setLastUndoState({
         nodes: flow.nodes || [],
-        edges: flow.edges || [],
-        viewport: flow.viewport || { x: 0, y: 0, zoom: 1 },
+        edges: flow.edges || []
       });
     }
   }, [id, version]);
@@ -382,8 +379,7 @@ const LayoutFlow = () => {
       setRedoStack([]); // Clear redo stack on new action
       setLastUndoState({
         nodes: flow.nodes || [],
-        edges: flow.edges || [],
-        viewport: flow.viewport || { x: 0, y: 0, zoom: 1 },
+        edges: flow.edges || []
       });
     }
   };
@@ -398,13 +394,11 @@ const LayoutFlow = () => {
       ...prev,
       {
         nodes: rfInstance.getNodes(),
-        edges: rfInstance.getEdges(),
-        viewport: rfInstance.getViewport(),
+        edges: rfInstance.getEdges()
       },
     ]);
     setNodes(prevState.nodes || []);
     setEdges(prevState.edges || []);
-    setViewport(prevState.viewport || { x: 0, y: 0, zoom: 1 });
   };
 
   // Redo logic
@@ -417,12 +411,10 @@ const LayoutFlow = () => {
       {
         nodes: rfInstance.getNodes(),
         edges: rfInstance.getEdges(),
-        viewport: rfInstance.getViewport(),
       },
     ]);
     setNodes(nextState.nodes || []);
     setEdges(nextState.edges || []);
-    setViewport(nextState.viewport || { x: 0, y: 0, zoom: 1 });
   };
 
   // Keyboard shortcuts for undo/redo
