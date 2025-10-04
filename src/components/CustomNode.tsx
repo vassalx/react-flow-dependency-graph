@@ -7,6 +7,7 @@ import {
 import { ReactNode, useEffect, useState } from "react";
 import { CustomNodeProps } from "../common/types";
 import UserIcon from "./icons/UserIcon";
+import getLinearGradientFromColorsArray from "../common/getLinearGradientFromColorsArray";
 
 const CustomNode = (props: NodeProps<CustomNodeProps>) => {
   const { data, id, sourcePosition, targetPosition } = props;
@@ -26,6 +27,22 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
     window.parent.postMessage({ type: "OPEN_ACCOUNT", accountId: id }, "*");
   };
 
+  const getBorderColor = (node: NodeProps<CustomNodeProps>) => {
+    if (!node.data) {
+      return "#ebebeb";
+    }
+
+    if (node.data.selected && !node.data.group) {
+      return "black";
+    }
+
+    if (Array.isArray(node.data.color)) {
+      return getLinearGradientFromColorsArray(node.data.color);
+    }
+
+    return node.data.color || "#ebebeb";
+  };
+
   return (
     <div
       style={{
@@ -35,15 +52,13 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
         borderColor: getBorderColor(props),
         borderStyle: "solid",
         borderWidth: props.data.selected
-          ? 6
-          : props.data.type === "Contact"
-          ? 1
-          : 3,
+          ? 4
+          : 2,
         background: "white",
         color: props.data ? props.data.textColor : "black",
         minWidth: props.width,
         padding: 10,
-        borderRadius: props.data.type === "Contact" ? 12 : 0,
+        borderRadius: props.data.type === "Contact" ? 36 : 12,
       }}
       onClick={handleNodeClick}
     >
