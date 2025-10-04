@@ -37,7 +37,9 @@ const localStorageRestoreKey = "restore_";
 const localStorageVersionKey = "version_";
 
 const LayoutFlow = () => {
-  const [versions, setVersions] = useState<{ key: string; date: string }[]>([]);
+  const [versions, setVersions] = useState<
+    { key: string; date: string; name: string }[]
+  >([]);
   const [version, setVersion] = useState<string>("");
   const { setNodes, setEdges, setViewport } = useReactFlow();
   const [direction, setDirection] = useState<ElkDirectionType>("LEFT");
@@ -111,7 +113,6 @@ const LayoutFlow = () => {
       setLastUndoState({
         nodes: nodes || [],
         edges: edges || [],
-        viewport: { x: 0, y: 0, zoom: 1 },
       });
     }
   };
@@ -292,8 +293,8 @@ const LayoutFlow = () => {
         key.startsWith(keyBeginsWith)
       );
       const versionList = allKeys.map((key) => {
-        const date = key.replace(keyBeginsWith, "");
-        return { key, date };
+        const { date, name } = JSON.parse(localStorage.getItem(key) || '{}');
+        return { key, date, name };
       });
       setVersions(
         versionList.sort((a, b) => (a.date < b.date ? 1 : -1)).slice(0, 20)
@@ -305,15 +306,23 @@ const LayoutFlow = () => {
     if (rfInstance && id) {
       const flow = rfInstance.toObject();
       const timestamp = new Date().toISOString();
+      const name =
+        prompt(
+          "Enter version name (optional):",
+          new Date(timestamp).toLocaleString()
+        ) || new Date(timestamp).toLocaleString();
       const versionKey = `${localStorageRestoreKey}${localStorageVersionKey}${id}_${timestamp}`;
-      let updatedVersions = [{ key: versionKey, date: timestamp }, ...versions];
+      let updatedVersions = [
+        { key: versionKey, date: timestamp, name: name },
+        ...versions,
+      ];
       if (updatedVersions.length > 20) {
         // Remove the oldest version
         const oldest = updatedVersions[updatedVersions.length - 1];
         localStorage.removeItem(oldest.key);
         updatedVersions = updatedVersions.slice(0, 20);
       }
-      localStorage.setItem(versionKey, JSON.stringify(flow));
+      localStorage.setItem(versionKey, JSON.stringify({ flow, name }));
       setVersions(updatedVersions);
       toast.success("Version saved!");
     }
@@ -325,7 +334,7 @@ const LayoutFlow = () => {
     const flowStr = localStorage.getItem(versionKey);
     if (flowStr) {
       setVersion(versionKey.replace(keyBeginsWith, ""));
-      const flow = JSON.parse(flowStr);
+      const { flow } = JSON.parse(flowStr);
       const { x = 0, y = 0, zoom = 1 } = flow.viewport;
       setNodes(flow.nodes || []);
       setEdges(flow.edges || []);
@@ -337,7 +346,6 @@ const LayoutFlow = () => {
   type FlowState = {
     nodes: Node[];
     edges: Edge[];
-    viewport: { x: number; y: number; zoom: number };
   };
 
   const [undoStack, setUndoStack] = useState<FlowState[]>([]);
@@ -352,8 +360,7 @@ const LayoutFlow = () => {
       setRedoStack([]);
       setLastUndoState({
         nodes: flow.nodes || [],
-        edges: flow.edges || [],
-        viewport: flow.viewport || { x: 0, y: 0, zoom: 1 },
+        edges: flow.edges || []
       });
     }
   }, [id, version]);
@@ -368,8 +375,7 @@ const LayoutFlow = () => {
       setRedoStack([]); // Clear redo stack on new action
       setLastUndoState({
         nodes: flow.nodes || [],
-        edges: flow.edges || [],
-        viewport: flow.viewport || { x: 0, y: 0, zoom: 1 },
+        edges: flow.edges || []
       });
     }
   };
@@ -384,13 +390,11 @@ const LayoutFlow = () => {
       ...prev,
       {
         nodes: rfInstance.getNodes(),
-        edges: rfInstance.getEdges(),
-        viewport: rfInstance.getViewport(),
+        edges: rfInstance.getEdges()
       },
     ]);
     setNodes(prevState.nodes || []);
     setEdges(prevState.edges || []);
-    setViewport(prevState.viewport || { x: 0, y: 0, zoom: 1 });
   };
 
   // Redo logic
@@ -403,12 +407,10 @@ const LayoutFlow = () => {
       {
         nodes: rfInstance.getNodes(),
         edges: rfInstance.getEdges(),
-        viewport: rfInstance.getViewport(),
       },
     ]);
     setNodes(nextState.nodes || []);
     setEdges(nextState.edges || []);
-    setViewport(nextState.viewport || { x: 0, y: 0, zoom: 1 });
   };
 
   // Keyboard shortcuts for undo/redo
@@ -474,7 +476,7 @@ const LayoutFlow = () => {
               <option value="">Restore version...</option>
               {versions.map((v) => (
                 <option key={v.key} value={v.key}>
-                  {new Date(v.date).toLocaleString()}
+                  {v.name || new Date(v.date).toLocaleString()}
                 </option>
               ))}
             </select>

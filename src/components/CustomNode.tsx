@@ -32,6 +32,18 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
         boxSizing: "border-box",
         textAlign: "left",
         fontSize: 12,
+        borderColor: getBorderColor(props),
+        borderStyle: "solid",
+        borderWidth: props.data.selected
+          ? 6
+          : props.data.type === "Contact"
+          ? 1
+          : 3,
+        background: "white",
+        color: props.data ? props.data.textColor : "black",
+        minWidth: props.width,
+        padding: 10,
+        borderRadius: props.data.type === "Contact" ? 12 : 0,
       }}
       onClick={handleNodeClick}
     >

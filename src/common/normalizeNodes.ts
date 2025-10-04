@@ -1,5 +1,4 @@
 import { Node, Position } from "@xyflow/react";
-import getLinearGradientFromColorsArray from "./getLinearGradientFromColorsArray";
 import { CustomNodeProps } from "./types";
 
 const normalizeNodes = (nodes: CustomNodeProps[]): Node[] => {
