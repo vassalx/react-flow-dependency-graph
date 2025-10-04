@@ -13,11 +13,7 @@ import {
 import "@xyflow/react/dist/style.css";
 
 import { useEffect, useState } from "react";
-import {
-  DiagramData,
-  edgeTypes,
-  nodeTypes,
-} from "../common/types";
+import { DiagramData, edgeTypes, nodeTypes } from "../common/types";
 import DownloadButton from "./DownloadButton";
 import SelectExample from "./SelectExample";
 import getElkLayout, { ElkDirectionType } from "../common/getElkLayout";
@@ -292,7 +288,7 @@ const LayoutFlow = () => {
         key.startsWith(keyBeginsWith)
       );
       const versionList = allKeys.map((key) => {
-        const { date, name } = JSON.parse(localStorage.getItem(key) || '{}');
+        const { date, name } = JSON.parse(localStorage.getItem(key) || "{}");
         return { key, date, name };
       });
       setVersions(
@@ -338,6 +334,12 @@ const LayoutFlow = () => {
       setNodes(flow.nodes || []);
       setEdges(flow.edges || []);
       setViewport({ x, y, zoom });
+      setUndoStack([]);
+      setRedoStack([]);
+      setLastUndoState({
+        nodes: flow.nodes || [],
+        edges: flow.edges || [],
+      });
       toast.success("Version restored!");
     }
   };
@@ -359,10 +361,10 @@ const LayoutFlow = () => {
       setRedoStack([]);
       setLastUndoState({
         nodes: flow.nodes || [],
-        edges: flow.edges || []
+        edges: flow.edges || [],
       });
     }
-  }, [id, version]);
+  }, [id]);
 
   // Push current state to undo stack before any change
   const pushToUndoStack = () => {
@@ -374,7 +376,7 @@ const LayoutFlow = () => {
       setRedoStack([]); // Clear redo stack on new action
       setLastUndoState({
         nodes: flow.nodes || [],
-        edges: flow.edges || []
+        edges: flow.edges || [],
       });
     }
   };
@@ -389,7 +391,7 @@ const LayoutFlow = () => {
       ...prev,
       {
         nodes: rfInstance.getNodes(),
-        edges: rfInstance.getEdges()
+        edges: rfInstance.getEdges(),
       },
     ]);
     setNodes(prevState.nodes || []);
