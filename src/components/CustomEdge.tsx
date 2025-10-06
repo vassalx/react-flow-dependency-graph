@@ -14,7 +14,7 @@ interface EdgeLabelProps {
 }
 
 const EdgeLabel = (props: EdgeLabelProps) => {
-  const { transform, label } = props;
+  const { transform, label, hasBorder } = props;
   return (
     <div
       style={{
@@ -24,9 +24,11 @@ const EdgeLabel = (props: EdgeLabelProps) => {
         paddingBottom: 0,
         paddingLeft: 4,
         paddingRight: 4,
-        fontSize: 12, 
+        fontSize: 12,
       }}
-      className="border rounded-l"
+      className={`nodrag nopan app__custom-edge ${
+        hasBorder ? "app__custom-edge__box" : ""
+      }`}
     >
       {label}
     </div>
@@ -89,10 +91,7 @@ const CustomEdge = (props: EdgeProps<CustomEdgeProps>) => {
 
   return (
     <>
-      <BaseEdge
-        path={edgePath}
-        {...edgeProps}
-      />
+      <BaseEdge path={edgePath} {...edgeProps} />
       <EdgeLabelRenderer>
         {data?.sourceLabel && (
           <EdgeLabel
