@@ -102,7 +102,6 @@ const LayoutFlow = () => {
       return;
     } else {
       const { nodes, edges } = await updateELKLayout(data.nodes, data.edges);
-      console.log("SAVING NEW FLOW", nodes, edges);
       setUndoStack([]);
       setRedoStack([]);
       setLastUndoState({

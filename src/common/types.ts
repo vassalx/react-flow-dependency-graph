@@ -29,6 +29,7 @@ export type CustomNodeProps = Node<
     group?: string;
     selected?: boolean;
     type?: string
+    borderStyle?: string;
   },
   "custom"
 >;

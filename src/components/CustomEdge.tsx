@@ -2,7 +2,7 @@ import {
   EdgeLabelRenderer,
   BaseEdge,
   type EdgeProps,
-  getSmoothStepPath,
+  getSimpleBezierPath,
 } from "@xyflow/react";
 import { CustomEdgeProps } from "../common/types";
 import { ReactNode } from "react";
@@ -19,6 +19,12 @@ const EdgeLabel = (props: EdgeLabelProps) => {
     <div
       style={{
         transform,
+        borderRadius: 4,
+        paddingTop: 0,
+        paddingBottom: 0,
+        paddingLeft: 4,
+        paddingRight: 4,
+        fontSize: 12, 
       }}
       className={`nodrag nopan app__custom-edge ${
         hasBorder ? "app__custom-edge__box" : ""
@@ -46,14 +52,13 @@ const CustomEdge = (props: EdgeProps<CustomEdgeProps>) => {
     pathOptions, // eslint-disable-line @typescript-eslint/no-unused-vars
     ...edgeProps
   } = props;
-  const [edgePath, labelX, labelY] = getSmoothStepPath({
+  const [edgePath, labelX, labelY] = getSimpleBezierPath({
     sourceX,
     sourceY,
     sourcePosition,
     targetX,
     targetY,
     targetPosition,
-    borderRadius: 0,
   });
 
   const getTranslateSourceHandle = () => {
@@ -86,7 +91,10 @@ const CustomEdge = (props: EdgeProps<CustomEdgeProps>) => {
 
   return (
     <>
-      <BaseEdge path={edgePath} {...edgeProps} />
+      <BaseEdge
+        path={edgePath}
+        {...edgeProps}
+      />
       <EdgeLabelRenderer>
         {data?.sourceLabel && (
           <EdgeLabel

@@ -44,7 +44,7 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
         textAlign: "center",
         fontSize: 12,
         borderColor: getBorderColor(props),
-        borderStyle: "solid",
+        borderStyle: data.borderStyle || "solid",
         borderWidth: props.data.selected
           ? 6
           : props.data.type === "Contact"

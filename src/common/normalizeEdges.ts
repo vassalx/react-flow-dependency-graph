@@ -45,9 +45,9 @@ const getEdgeMarker = (
 const removeDuplicateEdges = (edges: CustomEdgeProps[]): CustomEdgeProps[] => {
   const seen = new Set();
 
-  return edges.filter(edge => {
+  return edges.filter((edge) => {
     // Create a sorted pair so direction doesn't matter
-    const nodePair = [edge.source, edge.target].sort().join('|');
+    const nodePair = [edge.source, edge.target].sort().join("|");
     const key = `${nodePair}|${edge.label}`;
 
     if (seen.has(key)) {
@@ -57,7 +57,7 @@ const removeDuplicateEdges = (edges: CustomEdgeProps[]): CustomEdgeProps[] => {
     seen.add(key);
     return true; // keep
   });
-}
+};
 
 const normalizeEdges = (edges: CustomEdgeProps[]): Edge[] => {
   return removeDuplicateEdges(edges).map((edge) => ({
@@ -68,6 +68,7 @@ const normalizeEdges = (edges: CustomEdgeProps[]): Edge[] => {
       ...edge.style,
       strokeDasharray: getStrokeDasharrayForEdgeLineType(edge.data?.lineType),
     },
+    type: "custom",
   }));
 };
 
