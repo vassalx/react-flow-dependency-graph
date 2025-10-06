@@ -14,7 +14,7 @@ interface EdgeLabelProps {
 }
 
 const EdgeLabel = (props: EdgeLabelProps) => {
-  const { transform, label, hasBorder } = props;
+  const { transform, label } = props;
   return (
     <div
       style={{
@@ -26,9 +26,7 @@ const EdgeLabel = (props: EdgeLabelProps) => {
         paddingRight: 4,
         fontSize: 12, 
       }}
-      className={`nodrag nopan app__custom-edge ${
-        hasBorder ? "app__custom-edge__box" : ""
-      }`}
+      className="border rounded-l"
     >
       {label}
     </div>

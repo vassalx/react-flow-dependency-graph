@@ -8,6 +8,7 @@ import {
   Edge,
   Node,
   ReactFlowInstance,
+  BackgroundVariant,
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
@@ -450,7 +451,7 @@ const LayoutFlow = () => {
       nodesConnectable={draggable}
       elementsSelectable={draggable}
     >
-      <Background />
+      <Background variant={BackgroundVariant.Lines} gap={50} />
       <div className="hidden sm:block">
         <MiniMap pannable zoomable />
       </div>
