@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 interface CustomButtonProps {
   label?: React.ReactNode;
@@ -29,23 +29,47 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
   disabled = false,
   size = "lg",
   round = false,
-}) => (
-  <button
-    className={
-      `inline-flex h-${
-        size === "lg" ? 12 : size === "md" ? 10 : 8
-      } items-center flex gap-2 justify-center rounded-${
-        round ? "full" : "md"
-      } px-${
-        size === "lg" ? 6 : size === "md" ? 3 : 0
-      } font-medium transition active:scale-110 shadow-sm cursor-pointer ${
-        colorClasses[color]
-      } ${disabled ? "opacity-50 cursor-not-allowed" : ""} ` + className
+}) => {
+  const getHeight = () => {
+    if (size === "lg") {
+      return 12;
     }
-    onClick={onClick}
-    disabled={disabled}
-  >
-    {icon && <span>{icon}</span>}
-    {label && <span>{label}</span>}
-  </button>
-);
+    if (size === "md") {
+      return 10;
+    }
+    return 8;
+  };
+  const getRounded = () => {
+    if (round) {
+      return "full";
+    }
+    return "md";
+  };
+  const getHorizontalPadding = () => {
+    if (size === "lg") {
+      return 6;
+    }
+    if (size === "md") {
+      return 4;
+    }
+    return 0;
+  };
+  const height = useMemo(() => getHeight(), [size]);
+  const rounded = useMemo(() => getRounded(), [round]);
+  const horizontalPadding = useMemo(() => getHorizontalPadding(), [size]);
+  console.log(height, rounded, horizontalPadding);
+  return (
+    <button
+      className={
+        `inline-flex h-${height} items-center flex gap-2 justify-center rounded-${rounded} px-${horizontalPadding} font-medium transition active:scale-110 shadow-sm cursor-pointer ${
+          colorClasses[color]
+        } ${disabled ? "opacity-50 cursor-not-allowed" : ""} ` + className
+      }
+      onClick={onClick}
+      disabled={disabled}
+    >
+      {icon && <span>{icon}</span>}
+      {label && <span>{label}</span>}
+    </button>
+  );
+};
