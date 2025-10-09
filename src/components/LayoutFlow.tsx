@@ -320,11 +320,17 @@ const LayoutFlow = () => {
     if (rfInstance && id) {
       const flow = rfInstance.toObject();
       const timestamp = new Date().toISOString();
-      const name =
+      let name =
         prompt(
           "Enter version name (optional):",
           new Date(timestamp).toLocaleString()
-        ) || new Date(timestamp).toLocaleString();
+        );
+      if (name === null) {
+        return;
+      }
+      if (!name.trim()) {
+        name = new Date(timestamp).toLocaleString();
+      }
       const versionKey = `${localStorageRestoreKey}${localStorageVersionKey}${id}_${timestamp}`;
       let updatedVersions = [
         { key: versionKey, date: timestamp, name: name },
@@ -337,17 +343,16 @@ const LayoutFlow = () => {
         updatedVersions = updatedVersions.slice(0, 20);
       }
       localStorage.setItem(versionKey, JSON.stringify({ flow, name }));
+      setVersion(versionKey);
       setVersions(updatedVersions);
       toast.success("Version saved!");
     }
   };
 
   const handleSelectVersion = (versionKey: string) => {
-    const keyBeginsWith =
-      localStorageRestoreKey + localStorageVersionKey + id + "_";
     const flowStr = localStorage.getItem(versionKey);
     if (flowStr) {
-      setVersion(versionKey.replace(keyBeginsWith, ""));
+      setVersion(versionKey);
       const { flow } = JSON.parse(flowStr);
       const { x = 0, y = 0, zoom = 1 } = flow.viewport;
       setNodes(flow.nodes || []);
@@ -529,25 +534,69 @@ const LayoutFlow = () => {
   return (
     <RollUpProvider onRollUp={handleRollUp}>
       <ReactFlow
-        defaultNodes={[]}
-        defaultEdges={[]}
-        fitView
-        nodeTypes={nodeTypes}
-        edgeTypes={edgeTypes}
-        onNodeDragStop={() => {
-          onSave();
-          pushToUndoStack();
-        }}
-        onInit={setRfInstance}
-        minZoom={0.05}
-        maxZoom={2}
-        nodesDraggable={draggable}
-        nodesConnectable={draggable}
-        elementsSelectable={draggable}
-      >
-        <Background variant={BackgroundVariant.Lines} gap={50} />
-        <div className="hidden sm:block">
-          <MiniMap pannable zoomable />
+      defaultNodes={[]}
+      defaultEdges={[]}
+      fitView
+      nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
+      onNodeDragStop={() => {
+        onSave();
+        pushToUndoStack();
+      }}
+      onInit={setRfInstance}
+      minZoom={0.05}
+      maxZoom={2}
+      nodesDraggable={draggable}
+      nodesConnectable={draggable}
+      elementsSelectable={draggable}
+    >
+      <Background variant={BackgroundVariant.Lines} gap={50} />
+      <div className="hidden sm:block">
+        <MiniMap pannable zoomable />
+      </div>
+      <Panel position="top-left" className="mr-32!">
+        <div className="flex flex-col gap-2">
+          <DownloadButton id={id} />
+          <SelectExample onSelectExample={handleSelectFile} />
+          <div className="flex gap-2">
+            <CustomButton
+              label="Save"
+              onClick={handleSaveVersion}
+              icon={<SaveIcon />}
+            />
+            <select
+              className="shadow-sm rounded-md px-2 py-1 bg-white"
+              value={version}
+              onChange={(e) => {
+                if (e.target.value) {
+                  handleSelectVersion(e.target.value);
+                }
+              }}
+            >
+              <option value="">Restore version...</option>
+              {versions.map((v) => (
+                <option key={v.key} value={v.key}>
+                  {v.name || new Date(v.date).toLocaleString()}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex gap-2">
+            <CustomButton
+              className="flex-grow"
+              label="Undo"
+              icon={<RevertArrowIcon />}
+              onClick={handleUndo}
+              disabled={undoStack.length === 0}
+            />
+            <CustomButton
+              className="flex-grow"
+              label="Redo"
+              icon={<ClockwiseArrowIcon />}
+              onClick={handleRedo}
+              disabled={redoStack.length === 0}
+            />
+          </div>
         </div>
         <Panel position="top-left" className="mr-10">
           <div className="flex flex-col gap-2 pr-32">
@@ -614,6 +663,7 @@ const LayoutFlow = () => {
         />
         <LoadingOverlay />
       </ReactFlow>
+    
     </RollUpProvider>
   );
 };
