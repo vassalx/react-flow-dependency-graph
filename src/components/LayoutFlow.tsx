@@ -13,8 +13,14 @@ import {
 
 import "@xyflow/react/dist/style.css";
 
-import { useEffect, useState } from "react";
-import { DiagramData, edgeTypes, nodeTypes } from "../common/types";
+import { useCallback, useEffect, useState } from "react";
+import {
+  CustomEdgeProps,
+  CustomNodeProps,
+  DiagramData,
+  edgeTypes,
+  nodeTypes,
+} from "../common/types";
 import DownloadButton from "./DownloadButton";
 import SelectExample from "./SelectExample";
 import getElkLayout, { ElkDirectionType } from "../common/getElkLayout";
@@ -26,6 +32,10 @@ import { SaveIcon } from "./icons/SaveIcon";
 import toast from "react-hot-toast";
 import RevertArrowIcon from "./icons/RevertArrowIcon";
 import ClockwiseArrowIcon from "./icons/ClockwiseArrowIcon";
+import normalizeEdges from "../common/normalizeEdges";
+import normalizeNodes from "../common/normalizeNodes";
+import addColorsToNodes from "../common/addColorToNodex";
+import { RollUpProvider } from "../context/RollUpContext";
 
 const localStorageDirKey = "dir_";
 const localStorageDraggableKey = "draggable";
@@ -37,7 +47,7 @@ const LayoutFlow = () => {
     { key: string; date: string; name: string }[]
   >([]);
   const [version, setVersion] = useState<string>("");
-  const { setNodes, setEdges, setViewport } = useReactFlow();
+  const { setNodes, setEdges, setViewport, getNode } = useReactFlow();
   const [direction, setDirection] = useState<ElkDirectionType>("LEFT");
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance<
     Node,
@@ -63,10 +73,18 @@ const LayoutFlow = () => {
 
     const a1 = nodesA
       .sort((a1, b1) => a1.id.localeCompare(b1.id))
-      .map((node) => ({ id: node.id, data: node.data }));
+      .map((node) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { collapsed, ...rest } = node.data;
+        return { id: node.id, data: rest };
+      });
     const a2 = nodesB
       .sort((a1, b1) => a1.id.localeCompare(b1.id))
-      .map((node) => ({ id: node.id, data: node.data }));
+      .map((node) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { collapsed, ...rest } = node.data;
+        return { id: node.id, data: rest };
+      });
 
     return JSON.stringify(a1) === JSON.stringify(a2);
   };
@@ -97,6 +115,7 @@ const LayoutFlow = () => {
       equalEdgesData(flow.edges, data.edges)
     ) {
       const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+
       setNodes(flow.nodes);
       setEdges(flow.edges);
       setViewport({ x, y, zoom });
@@ -135,149 +154,149 @@ const LayoutFlow = () => {
     }
   }, [direction]);
 
-  // useEffect(() => {
-  //   const edges = [
-  //     {
-  //       id: "e1",
-  //       source: "2",
-  //       target: "1",
-  //       label: "CEO of",
-  //       data: { lineType: "dashed" },
-  //     },
+  useEffect(() => {
+    const edges = [
+      {
+        id: "e1",
+        source: "2",
+        target: "1",
+        label: "CEO of",
+        data: { lineType: "dashed" },
+      },
 
-  //     {
-  //       id: "e2",
-  //       source: "3a",
-  //       target: "3",
-  //       label: "Leads",
-  //       data: { lineType: "dashed" },
-  //     },
-  //     {
-  //       id: "e3",
-  //       source: "4a",
-  //       target: "4",
-  //       label: "Leads",
-  //       data: { lineType: "dashed" },
-  //     },
-  //     {
-  //       id: "e4",
-  //       source: "5a",
-  //       target: "5",
-  //       label: "Leads",
-  //       data: { lineType: "dashed" },
-  //     },
-  //     {
-  //       id: "e5",
-  //       source: "6a",
-  //       target: "6",
-  //       label: "Leads",
-  //       data: { lineType: "dashed" },
-  //     },
-  //     {
-  //       id: "e6",
-  //       source: "7a",
-  //       target: "7",
-  //       label: "CEO of",
-  //       data: { lineType: "dashed" },
-  //     },
-  //     {
-  //       id: "e7",
-  //       source: "8a",
-  //       target: "8",
-  //       label: "CEO of",
-  //       data: { lineType: "dashed" },
-  //     },
+      {
+        id: "e2",
+        source: "3a",
+        target: "3",
+        label: "Leads",
+        data: { lineType: "dashed" },
+      },
+      {
+        id: "e3",
+        source: "4a",
+        target: "4",
+        label: "Leads",
+        data: { lineType: "dashed" },
+      },
+      {
+        id: "e4",
+        source: "5a",
+        target: "5",
+        label: "Leads",
+        data: { lineType: "dashed" },
+      },
+      {
+        id: "e5",
+        source: "6a",
+        target: "6",
+        label: "Leads",
+        data: { lineType: "dashed" },
+      },
+      {
+        id: "e6",
+        source: "7a",
+        target: "7",
+        label: "CEO of",
+        data: { lineType: "dashed" },
+      },
+      {
+        id: "e7",
+        source: "8a",
+        target: "8",
+        label: "CEO of",
+        data: { lineType: "dashed" },
+      },
 
-  //     { id: "e8", source: "1", target: "3" },
-  //     { id: "e9", source: "1", target: "4" },
-  //     { id: "e10", source: "1", target: "5" },
-  //     { id: "e11", source: "1", target: "6" },
-  //     { id: "e12", source: "1", target: "7" },
-  //     { id: "e13", source: "1", target: "8" },
-  //   ] as CustomEdgeProps[];
-  //   const nodes = [
-  //     {
-  //       id: "1",
-  //       data: {
-  //         label: "Microsoft Corporation",
-  //         link: "https://www.microsoft.com/uk-ua/",
-  //         group: "1",
-  //       },
-  //     },
-  //     { id: "2", data: { label: "Satya Nadella - CEO", type: "Contact" } },
+      { id: "e8", source: "1", target: "3" },
+      { id: "e9", source: "1", target: "4" },
+      { id: "e10", source: "1", target: "5" },
+      { id: "e11", source: "1", target: "6" },
+      { id: "e12", source: "1", target: "7" },
+      { id: "e13", source: "1", target: "8" },
+    ] as CustomEdgeProps[];
+    const nodes = [
+      {
+        id: "1",
+        data: {
+          label: "Microsoft Corporation",
+          link: "https://www.microsoft.com/uk-ua/",
+          group: "1",
+        },
+      },
+      { id: "2", data: { label: "Satya Nadella - CEO", type: "Contact" } },
 
-  //     {
-  //       id: "3",
-  //       data: { label: "Azure (Cloud Services)", group: "1", selected: true },
-  //     },
-  //     {
-  //       id: "3a",
-  //       data: { label: "Scott Guthrie - EVP, Cloud & AI", type: "Contact" },
-  //     },
+      {
+        id: "3",
+        data: { label: "Azure (Cloud Services)", group: "1", selected: true },
+      },
+      {
+        id: "3a",
+        data: { label: "Scott Guthrie - EVP, Cloud & AI", type: "Contact" },
+      },
 
-  //     { id: "4", data: { label: "Windows & Devices" } },
-  //     {
-  //       id: "4a",
-  //       data: {
-  //         label: "Panos Panay - EVP, Windows & Devices",
-  //         type: "Contact",
-  //       },
-  //     },
+      { id: "4", data: { label: "Windows & Devices" } },
+      {
+        id: "4a",
+        data: {
+          label: "Panos Panay - EVP, Windows & Devices",
+          type: "Contact",
+        },
+      },
 
-  //     {
-  //       id: "5",
-  //       data: { label: "Office & Productivity" },
-  //     },
-  //     {
-  //       id: "5a",
-  //       data: { label: "Rajesh Jha - EVP, Office & Teams", type: "Contact" },
-  //     },
+      {
+        id: "5",
+        data: { label: "Office & Productivity" },
+      },
+      {
+        id: "5a",
+        data: { label: "Rajesh Jha - EVP, Office & Teams", type: "Contact" },
+      },
 
-  //     {
-  //       id: "6",
-  //       data: { label: "Gaming (Xbox, Activision)" },
-  //     },
-  //     {
-  //       id: "6a",
-  //       data: { label: "Phil Spencer - CEO, Gaming", type: "Contact" },
-  //     },
+      {
+        id: "6",
+        data: { label: "Gaming (Xbox, Activision)" },
+      },
+      {
+        id: "6a",
+        data: { label: "Phil Spencer - CEO, Gaming", type: "Contact" },
+      },
 
-  //     {
-  //       id: "7",
-  //       data: {
-  //         label: "LinkedIn",
-  //         link: "https://www.linkedin.com/feed/",
-  //         group: "1",
-  //       },
-  //     },
-  //     {
-  //       id: "7a",
-  //       data: { label: "Ryan Roslansky - CEO, LinkedIn", type: "Contact" },
-  //     },
-  //     {
-  //       id: "8",
-  //       data: { label: "GitHub", link: "https://github.com/", group: "1" },
-  //     },
-  //     {
-  //       id: "8a",
-  //       data: { label: "Thomas Dohmke - CEO, GitHub", type: "Contact" },
-  //     },
-  //   ] as CustomNodeProps[];
-  //   setTimeout(() => {
-  //     handleSelectFile({
-  //       edges: normalizeEdges(edges),
-  //       nodes: normalizeNodes(
-  //         addColorsToNodes(nodes, {
-  //           "1": "blue",
-  //         })
-  //       ),
-  //       id: "1",
-  //       legend: {
-  //         "1": "blue",
-  //       },
-  //     });
-  //   }, 1000);
-  // }, []);
+      {
+        id: "7",
+        data: {
+          label: "LinkedIn",
+          link: "https://www.linkedin.com/feed/",
+          group: "1",
+        },
+      },
+      {
+        id: "7a",
+        data: { label: "Ryan Roslansky - CEO, LinkedIn", type: "Contact" },
+      },
+      {
+        id: "8",
+        data: { label: "GitHub", link: "https://github.com/", group: "1" },
+      },
+      {
+        id: "8a",
+        data: { label: "Thomas Dohmke - CEO, GitHub", type: "Contact" },
+      },
+    ] as CustomNodeProps[];
+    setTimeout(() => {
+      handleSelectFile({
+        edges: normalizeEdges(edges),
+        nodes: normalizeNodes(
+          addColorsToNodes(nodes, {
+            "1": "blue",
+          })
+        ),
+        id: "1",
+        legend: {
+          "1": "blue",
+        },
+      });
+    }, 1000);
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -433,93 +452,169 @@ const LayoutFlow = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [undoStack, redoStack, rfInstance]);
 
+  const getChildrenRecursive = useCallback(
+    (parentId: string): string[] => {
+      const edges = rfInstance?.getEdges() || [];
+      const directChildren = edges
+        .filter((e) => e.source === parentId)
+        .map((e) => e.target);
+
+      const allDescendants = directChildren.flatMap((childId) =>
+        getChildrenRecursive(childId)
+      );
+
+      return [...directChildren, ...allDescendants];
+    },
+    [rfInstance]
+  );
+
+  const onNodeClick = useCallback(
+    (nodeId: string) => {
+      const isCollapsed = getNode(nodeId)?.data?.collapsed;
+      const children = getChildrenRecursive(nodeId);
+      if (children.length === 0) return; // no children to hide/show
+
+      if (isCollapsed) {
+        // Expand node
+        setNodes((nds) =>
+          nds.map((n) => {
+            if (n.id === nodeId) {
+              return { ...n, data: { ...n.data, collapsed: false } };
+            }
+            if (children.includes(n.id)) {
+              return { ...n, hidden: false };
+            }
+            return n;
+          })
+        );
+
+        setEdges((eds) =>
+          eds.map((e) =>
+            children.includes(e.source) || children.includes(e.target)
+              ? { ...e, hidden: false }
+              : e
+          )
+        );
+      } else {
+        // Collapse node
+        setNodes((nds) =>
+          nds.map((n) => {
+            if (n.id === nodeId) {
+              return { ...n, data: { ...n.data, collapsed: true } };
+            }
+            if (children.includes(n.id)) {
+              return { ...n, hidden: true };
+            }
+            return n;
+          })
+        );
+
+        setEdges((eds) =>
+          eds.map((e) =>
+            children.includes(e.source) || children.includes(e.target)
+              ? { ...e, hidden: true }
+              : e
+          )
+        );
+      }
+      onSave();
+    },
+    [getNode, getChildrenRecursive, onSave, setNodes, setEdges, rfInstance, id]
+  );
+
+  const handleRollUp = (nodeId: string) => {
+    onNodeClick(nodeId);
+  };
+
   return (
-    <ReactFlow
-      defaultNodes={[]}
-      defaultEdges={[]}
-      fitView
-      nodeTypes={nodeTypes}
-      edgeTypes={edgeTypes}
-      onNodeDragStop={() => {
-        onSave();
-        pushToUndoStack();
-      }}
-      onInit={setRfInstance}
-      minZoom={0.05}
-      maxZoom={2}
-      nodesDraggable={draggable}
-      nodesConnectable={draggable}
-      elementsSelectable={draggable}
-    >
-      <Background variant={BackgroundVariant.Lines} gap={50} />
-      <div className="hidden sm:block">
-        <MiniMap pannable zoomable />
-      </div>
-      <Panel position="top-left" className="mr-10">
-        <div className="flex flex-col gap-2 pr-32">
-          <DownloadButton id={id} />
-          <SelectExample onSelectExample={handleSelectFile} />
-          <div className="flex gap-2">
-            <CustomButton
-              label="Save"
-              onClick={handleSaveVersion}
-              icon={<SaveIcon />}
-            />
-            <select
-              className="shadow-sm rounded-md px-2 py-1 bg-white"
-              value={version}
-              onChange={(e) => {
-                if (e.target.value) {
-                  handleSelectVersion(e.target.value);
-                }
-              }}
-            >
-              <option value="">Restore version...</option>
-              {versions.map((v) => (
-                <option key={v.key} value={v.key}>
-                  {v.name || new Date(v.date).toLocaleString()}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="flex gap-2">
-            <CustomButton
-              className="flex-grow"
-              label="Undo"
-              icon={<RevertArrowIcon />}
-              onClick={handleUndo}
-              disabled={undoStack.length === 0}
-            />
-            <CustomButton
-              className="flex-grow"
-              label="Redo"
-              icon={<ClockwiseArrowIcon />}
-              onClick={handleRedo}
-              disabled={redoStack.length === 0}
-            />
-          </div>
+    <RollUpProvider onRollUp={handleRollUp}>
+      <ReactFlow
+        defaultNodes={[]}
+        defaultEdges={[]}
+        fitView
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        onNodeDragStop={() => {
+          onSave();
+          pushToUndoStack();
+        }}
+        onInit={setRfInstance}
+        minZoom={0.05}
+        maxZoom={2}
+        nodesDraggable={draggable}
+        nodesConnectable={draggable}
+        elementsSelectable={draggable}
+      >
+        <Background variant={BackgroundVariant.Lines} gap={50} />
+        <div className="hidden sm:block">
+          <MiniMap pannable zoomable />
         </div>
-      </Panel>
-      <Panel position="top-right">
-        <PositioningTools
-          selectedDirection={direction}
-          onSelectDirection={(newDirection) => {
-            setDirection(newDirection);
+        <Panel position="top-left" className="mr-10">
+          <div className="flex flex-col gap-2 pr-32">
+            <DownloadButton id={id} />
+            <SelectExample onSelectExample={handleSelectFile} />
+            <div className="flex gap-2">
+              <CustomButton
+                label="Save"
+                onClick={handleSaveVersion}
+                icon={<SaveIcon />}
+              />
+              <select
+                className="shadow-sm rounded-md px-2 py-1 bg-white"
+                value={version}
+                onChange={(e) => {
+                  if (e.target.value) {
+                    handleSelectVersion(e.target.value);
+                  }
+                }}
+              >
+                <option value="">Restore version...</option>
+                {versions.map((v) => (
+                  <option key={v.key} value={v.key}>
+                    {v.name || new Date(v.date).toLocaleString()}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex gap-2">
+              <CustomButton
+                className="flex-grow"
+                label="Undo"
+                icon={<RevertArrowIcon />}
+                onClick={handleUndo}
+                disabled={undoStack.length === 0}
+              />
+              <CustomButton
+                className="flex-grow"
+                label="Redo"
+                icon={<ClockwiseArrowIcon />}
+                onClick={handleRedo}
+                disabled={redoStack.length === 0}
+              />
+            </div>
+          </div>
+        </Panel>
+        <Panel position="top-right">
+          <PositioningTools
+            selectedDirection={direction}
+            onSelectDirection={(newDirection) => {
+              setDirection(newDirection);
+            }}
+          />
+        </Panel>
+        <Panel position="bottom-left">
+          <DiagramLegend items={items} />
+        </Panel>
+        <Controls
+          className="bg-white"
+          onInteractiveChange={(status) => {
+            localStorage.setItem(localStorageDraggableKey, String(status));
+            setDraggable(status);
           }}
         />
-      </Panel>
-      <Panel position="bottom-left">
-        <DiagramLegend items={items} />
-      </Panel>
-      <Controls
-        className="bg-white"
-        onInteractiveChange={(status) => {
-          localStorage.setItem(localStorageDraggableKey, String(status));
-          setDraggable(status);
-        }}
-      />
-      <LoadingOverlay />
-    </ReactFlow>
+        <LoadingOverlay />
+      </ReactFlow>
+    </RollUpProvider>
   );
 };
 

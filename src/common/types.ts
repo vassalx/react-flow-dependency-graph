@@ -30,6 +30,7 @@ export type CustomNodeProps = Node<
     selected?: boolean;
     type?: string
     borderStyle?: string;
+    collapsed?: boolean;
   },
   "custom"
 >;

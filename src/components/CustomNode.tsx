@@ -8,11 +8,18 @@ import { ReactNode, useEffect, useState } from "react";
 import { CustomNodeProps } from "../common/types";
 import UserIcon from "./icons/UserIcon";
 import getLinearGradientFromColorsArray from "../common/getLinearGradientFromColorsArray";
+import { CustomButton } from "./CustomButton";
+import PlusIcon from "./icons/PlusIcon";
+import MinusIcon from "./icons/MinusIcon";
+import { useRollUp } from "../context/RollUpContext";
 
 const CustomNode = (props: NodeProps<CustomNodeProps>) => {
   const { data, id, sourcePosition, targetPosition } = props;
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(data.collapsed || false);
   const [label, setLabel] = useState<string | ReactNode>(data.label);
   const updateNodeInternals = useUpdateNodeInternals();
+
+  const handleCollapse = useRollUp();
 
   useEffect(() => {
     updateNodeInternals(id);
@@ -51,14 +58,13 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
         fontSize: 12,
         borderColor: getBorderColor(props),
         borderStyle: data.borderStyle || "solid",
-        borderWidth: props.data.selected
-          ? 4
-          : 2,
+        borderWidth: props.data.selected ? 4 : 2,
         background: "white",
         color: props.data ? props.data.textColor : "black",
         minWidth: props.width,
         padding: 10,
         borderRadius: props.data.type === "Contact" ? 36 : 12,
+        boxShadow: "0px 0px 6px 2px rgba(0,0,0,0.1)",
       }}
       onClick={handleNodeClick}
     >
@@ -101,6 +107,16 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
             <div className="font-bold text-gray-500">CG: {data.group}</div>
           ) : null}
         </div>
+        <CustomButton
+          label={isCollapsed ? <PlusIcon /> : <MinusIcon />}
+          size="sm"
+          className="border"
+          round
+          onClick={() => {
+            handleCollapse(id);
+            setIsCollapsed((prev) => !prev);
+          }}
+        />
       </div>
     </div>
   );
