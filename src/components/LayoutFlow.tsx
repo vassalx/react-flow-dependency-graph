@@ -301,11 +301,17 @@ const LayoutFlow = () => {
     if (rfInstance && id) {
       const flow = rfInstance.toObject();
       const timestamp = new Date().toISOString();
-      const name =
+      let name =
         prompt(
           "Enter version name (optional):",
           new Date(timestamp).toLocaleString()
-        ) || new Date(timestamp).toLocaleString();
+        );
+      if (name === null) {
+        return;
+      }
+      if (!name.trim()) {
+        name = new Date(timestamp).toLocaleString();
+      }
       const versionKey = `${localStorageRestoreKey}${localStorageVersionKey}${id}_${timestamp}`;
       let updatedVersions = [
         { key: versionKey, date: timestamp, name: name },
@@ -318,17 +324,16 @@ const LayoutFlow = () => {
         updatedVersions = updatedVersions.slice(0, 20);
       }
       localStorage.setItem(versionKey, JSON.stringify({ flow, name }));
+      setVersion(versionKey);
       setVersions(updatedVersions);
       toast.success("Version saved!");
     }
   };
 
   const handleSelectVersion = (versionKey: string) => {
-    const keyBeginsWith =
-      localStorageRestoreKey + localStorageVersionKey + id + "_";
     const flowStr = localStorage.getItem(versionKey);
     if (flowStr) {
-      setVersion(versionKey.replace(keyBeginsWith, ""));
+      setVersion(versionKey);
       const { flow } = JSON.parse(flowStr);
       const { x = 0, y = 0, zoom = 1 } = flow.viewport;
       setNodes(flow.nodes || []);
@@ -455,8 +460,8 @@ const LayoutFlow = () => {
       <div className="hidden sm:block">
         <MiniMap pannable zoomable />
       </div>
-      <Panel position="top-left" className="mr-10">
-        <div className="flex flex-col gap-2 pr-32">
+      <Panel position="top-left" className="mr-32!">
+        <div className="flex flex-col gap-2">
           <DownloadButton id={id} />
           <SelectExample onSelectExample={handleSelectFile} />
           <div className="flex gap-2">
