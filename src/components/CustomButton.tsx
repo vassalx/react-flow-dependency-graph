@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 
 interface CustomButtonProps {
   label?: React.ReactNode;
@@ -7,8 +7,8 @@ interface CustomButtonProps {
   color?: "black" | "white" | "green" | "blue" | "red" | "yellow";
   className?: string;
   disabled?: boolean;
-  size?: "sm" | "md" | "lg";
-  round?: boolean;
+  size?: "xs" | "sm" | "md" | "lg";
+  round?: "md" | "full";
 }
 
 const colorClasses: Record<NonNullable<CustomButtonProps["color"]>, string> = {
@@ -28,39 +28,30 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
   className = "",
   disabled = false,
   size = "lg",
-  round = false,
+  round = "md",
 }) => {
-  const getHeight = () => {
-    if (size === "lg") {
-      return 12;
-    }
-    if (size === "md") {
-      return 10;
-    }
-    return 8;
+  const heightMap = {
+    xs: "h-4",
+    sm: "h-8",
+    md: "h-10",
+    lg: "h-12",
   };
-  const getRounded = () => {
-    if (round) {
-      return "full";
-    }
-    return "md";
+
+  const roundedMap = {
+    md: "rounded-md",
+    full: "rounded-full",
   };
-  const getHorizontalPadding = () => {
-    if (size === "lg") {
-      return 6;
-    }
-    if (size === "md") {
-      return 4;
-    }
-    return 0;
+
+  const paddingMap = {
+    xs: "w-4",
+    sm: "px-2",
+    md: "px-4",
+    lg: "px-6",
   };
-  const height = useMemo(() => getHeight(), [size]);
-  const rounded = useMemo(() => getRounded(), [round]);
-  const horizontalPadding = useMemo(() => getHorizontalPadding(), [size]);
   return (
     <button
       className={
-        `inline-flex h-${height} items-center flex gap-2 justify-center rounded-${rounded} px-${horizontalPadding} font-medium transition active:scale-110 shadow-sm cursor-pointer ${
+        `inline-flex ${heightMap[size]} items-center flex gap-2 justify-center ${roundedMap[round]} ${paddingMap[size]} font-medium transition active:scale-110 shadow-sm cursor-pointer ${
           colorClasses[color]
         } ${disabled ? "opacity-50 cursor-not-allowed" : ""} ` + className
       }

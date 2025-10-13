@@ -4,6 +4,10 @@ import { CustomNodeProps } from "./types";
 const normalizeNodes = (nodes: CustomNodeProps[]): Node[] => {
   return nodes.map((node) => ({
     type: "custom",
+    style: {
+      minWidth: 150,
+      maxWidth: 200,
+    },
     width: 150,
     handles: [{ x: 0, y: 0, position: "left" as Position, type: "source" }],
     ...node,

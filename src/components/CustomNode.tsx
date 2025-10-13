@@ -65,16 +65,15 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
         borderRadius: props.data.type === "Contact" ? 36 : 12,
         boxShadow: "0px 0px 6px 2px rgba(0,0,0,0.1)",
       }}
-      onClick={handleNodeClick}
     >
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
         {data.type === "Contact" ? (
-          <div className="flex items-center justify-center rounded-full bg-gray-200 w-[36px] h-[36px] flex-none mr-2 text-lg">
+          <div className="flex items-center justify-center rounded-full bg-gray-200 w-[36px] h-[36px] flex-none text-lg">
             <UserIcon />
           </div>
         ) : null}
 
-        <div className="flex flex-col flex-1">
+        <div className="flex flex-col flex-1" onClick={handleNodeClick}>
           {label}
           <>
             {sourcePosition === "bottom" ? (
@@ -108,9 +107,9 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
         </div>
         <CustomButton
           label={data.collapsed?.size ? <PlusIcon /> : <MinusIcon />}
-          size="sm"
+          size="xs"
           className="border"
-          round
+          round="full"
           onClick={() => {
             console.log(data.collapsed);
             if (data.collapsed?.size) {
