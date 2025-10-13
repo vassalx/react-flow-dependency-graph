@@ -1,5 +1,5 @@
 import { Edge, Node, ReactFlowInstance } from "@xyflow/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 const localStorageRestoreKey = "restore_";
@@ -17,8 +17,10 @@ const useVersions = ({ rfInstance, id }: UseVersionsProps) => {
   >([]);
   const [selectedVersion, setSelectedVersion] = useState<string>("");
 
+  const currentIdRef = useRef(id);
+
   const saveVersion = () => {
-    if (rfInstance && id) {
+    if (rfInstance && currentIdRef.current) {
       const flow = rfInstance.toObject();
       const timestamp = new Date().toISOString();
       let name = prompt(
@@ -31,7 +33,7 @@ const useVersions = ({ rfInstance, id }: UseVersionsProps) => {
       if (!name.trim()) {
         name = new Date(timestamp).toLocaleString();
       }
-      const versionKey = `${localStorageRestoreKey}${localStorageVersionKey}${id}_${timestamp}`;
+      const versionKey = `${localStorageRestoreKey}${localStorageVersionKey}${currentIdRef.current}_${timestamp}`;
       let updatedVersions = [
         { key: versionKey, date: timestamp, name: name },
         ...versions,
@@ -71,6 +73,7 @@ const useVersions = ({ rfInstance, id }: UseVersionsProps) => {
   }
 
   useEffect(() => {
+    currentIdRef.current = id;
     if (rfInstance && id) {
       const keyBeginsWith =
         localStorageRestoreKey + localStorageVersionKey + id + "_";

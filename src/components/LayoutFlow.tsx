@@ -13,7 +13,7 @@ import {
 
 import "@xyflow/react/dist/style.css";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DiagramData, edgeTypes, nodeTypes } from "../common/types";
 import DownloadButton from "./DownloadButton";
 import SelectExample from "./SelectExample";
@@ -60,9 +60,7 @@ const LayoutFlow = () => {
     getFlowVersion,
   } = useVersions({ rfInstance, id });
   const { draggable, setDraggable } = useDraggable();
-  const { cachedDiagramData, setCachedDiagramData } = useCachedDiagramData({
-    id,
-  });
+  const { getCachedDiagramData, setCachedDiagramData } = useCachedDiagramData();
 
   const updateELKLayout = async (oldNodes: Node[], oldEdges: Edge[]) => {
     const { nodes, edges } = await getElkLayout(oldNodes, oldEdges, direction);
@@ -80,6 +78,7 @@ const LayoutFlow = () => {
   };
 
   const fetchLayout = async (data: DiagramData) => {
+    const cachedDiagramData = getCachedDiagramData(data.id || "");
     if (
       cachedDiagramData &&
       compareNodesData(cachedDiagramData.nodes, data.nodes) &&
@@ -92,14 +91,14 @@ const LayoutFlow = () => {
       setViewport({ x, y, zoom });
     } else if (data) {
       const { nodes, edges } = await updateELKLayout(data.nodes, data.edges);
-      setCachedDiagramData(data);
+      setCachedDiagramData(data, data.id || id);
       resetUndoRedoState({ nodes: nodes || [], edges: edges || [] });
     }
   };
 
   const onSave = () => {
     if (rfInstance && id) {
-      setCachedDiagramData(rfInstance.toObject());
+      setCachedDiagramData(rfInstance.toObject(), id);
     }
   };
 
@@ -115,45 +114,31 @@ const LayoutFlow = () => {
     }
   };
 
-  const getChildrenRecursive = useCallback(
-    (parentId: string): string[] => {
+  const rollUp = (nodeId: string) => {
+    if (rfInstance) {
+      const ancestors = getAncestors(nodeId, rfInstance?.getEdges() || []);
+
+      const visibleIds = new Set([nodeId, ...ancestors]);
+
+      const collapsedIds = rfInstance?.getNodes()
+        ? new Set(
+            rfInstance
+              ?.getNodes()
+              .filter((n) => !visibleIds.has(n.id))
+              .map((n) => n.id)
+          )
+        : new Set<string>();
+
+      const nodes = rfInstance?.getNodes() || [];
       const edges = rfInstance?.getEdges() || [];
-      const directChildren = edges
-        .filter((e) => e.source === parentId)
-        .map((e) => e.target);
 
-      const allDescendants = directChildren.flatMap((childId) =>
-        getChildrenRecursive(childId)
-      );
-
-      return [...directChildren, ...allDescendants];
-    },
-    [rfInstance]
-  );
-
-  function rollUp(nodeId: string) {
-    console.log("rollUp");
-    const ancestors = getAncestors(nodeId, rfInstance?.getEdges() || []);
-
-    const visibleIds = new Set([nodeId, ...ancestors]);
-
-    const collapsedIds = rfInstance?.getNodes()
-      ? new Set(
-          rfInstance
-            ?.getNodes()
-            .filter((n) => !visibleIds.has(n.id))
-            .map((n) => n.id)
-        )
-      : new Set<string>();
-
-    setNodes((nodes) =>
-      nodes.map((n) => {
+      const newNodes = nodes.map((n) => {
         if (n.id === nodeId) {
           return {
             ...n,
             data: {
               ...n.data,
-              collapsed: collapsedIds,
+              collapsed: Array.from(collapsedIds.values()),
             },
             hidden: false,
           };
@@ -163,55 +148,69 @@ const LayoutFlow = () => {
             hidden: collapsedIds.has(n.id) || n.hidden,
           };
         }
-      })
-    );
+      });
 
-    setEdges((edges) =>
-      edges.map((e) => ({
+      const newEdges = edges.map((e) => ({
         ...e,
-        hidden: (collapsedIds.has(e.target) || collapsedIds.has(e.source)) || e.hidden,
-      }))
-    );
+        hidden:
+          collapsedIds.has(e.target) || collapsedIds.has(e.source) || e.hidden,
+      }));
+
+      setNodes(newNodes);
+      setEdges(newEdges);
+
+      const newData = rfInstance.toObject();
+      newData.edges = newEdges;
+      newData.nodes = newNodes;
+
+      setCachedDiagramData(newData, id);
+    }
   }
 
-  function rollDown(nodeId: string) {
-    console.log("rollDown");
+  const rollDown = (nodeId: string) => {
     const node = rfInstance?.getNode(nodeId);
 
-    if (node) {
-      const collapsedIds = node.data.collapsed
-        ? (node.data.collapsed as Set<string>)
-        : new Set<string>();
-      setNodes((nodes) =>
-        nodes.map((n) => {
-          if (nodeId === n.id) {
-            return {
-              ...n,
-              data: {
-                ...n.data,
-                collapsed: new Set<string>(),
-              }
-            }
-          } else {
-            return {
-          ...n,
-          hidden: n.hidden && collapsedIds.has(n.id) ? false : n.hidden,
-        }
-          }
-        })
+    if (rfInstance && node) {
+      const collapsedIds = new Set<string>(
+        node.data.collapsed ? (node.data.collapsed as string[]) : []
       );
+      const nodes = rfInstance.getNodes();
+      const edges = rfInstance.getEdges();
+      const newNodes = nodes.map((n) => {
+        if (nodeId === n.id) {
+          return {
+            ...n,
+            data: {
+              ...n.data,
+              collapsed: [],
+            },
+          };
+        } else {
+          return {
+            ...n,
+            hidden: n.hidden && collapsedIds.has(n.id) ? false : n.hidden,
+          };
+        }
+      });
+      setNodes(newNodes);
 
       collapsedIds.add(nodeId);
 
-      setEdges((edges) =>
-        edges.map((e) => ({
-          ...e,
-          hidden:
-            e.hidden && collapsedIds.has(e.source) || collapsedIds.has(e.target)
-              ? false
-              : e.hidden,
-        }))
-      );
+      const newEdges = edges.map((e) => ({
+        ...e,
+        hidden:
+          (e.hidden && collapsedIds.has(e.source)) || collapsedIds.has(e.target)
+            ? false
+            : e.hidden,
+      }));
+
+      setEdges(newEdges);
+
+      const newData = rfInstance.toObject();
+      newData.edges = newEdges;
+      newData.nodes = newNodes;
+
+      setCachedDiagramData(newData, id);
     }
   }
 

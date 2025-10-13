@@ -106,13 +106,12 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
           ) : null}
         </div>
         <CustomButton
-          label={data.collapsed?.size ? <PlusIcon /> : <MinusIcon />}
+          label={data.collapsed?.length ? <PlusIcon /> : <MinusIcon />}
           size="xs"
           className="border"
           round="full"
           onClick={() => {
-            console.log(data.collapsed);
-            if (data.collapsed?.size) {
+            if (data.collapsed?.length) {
               onRollDown(id);
             } else {
               onRollUp(id);
