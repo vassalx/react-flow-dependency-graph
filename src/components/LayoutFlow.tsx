@@ -9,6 +9,7 @@ import {
   Node,
   ReactFlowInstance,
   BackgroundVariant,
+  ConnectionMode,
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
@@ -253,6 +254,7 @@ const LayoutFlow = () => {
         nodesDraggable={draggable}
         nodesConnectable={draggable}
         elementsSelectable={draggable}
+        connectionMode={ConnectionMode.Loose}
       >
         <Background variant={BackgroundVariant.Lines} gap={50} />
         <div className="hidden sm:block">

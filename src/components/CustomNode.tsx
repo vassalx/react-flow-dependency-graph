@@ -75,32 +75,10 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
 
         <div className="flex flex-col flex-1" onClick={handleNodeClick}>
           {label}
-          <>
-            {sourcePosition === "bottom" ? (
-              <Handle type="source" position={Position.Bottom} id="bottom" />
-            ) : null}
-            {targetPosition === "bottom" ? (
-              <Handle type="target" position={Position.Bottom} id="bottom" />
-            ) : null}
-            {sourcePosition === "left" ? (
-              <Handle type="source" position={Position.Left} id="left" />
-            ) : null}
-            {targetPosition === "left" ? (
-              <Handle type="target" position={Position.Left} id="left" />
-            ) : null}
-            {sourcePosition === "top" ? (
-              <Handle type="source" position={Position.Top} id="top" />
-            ) : null}
-            {targetPosition === "top" ? (
-              <Handle type="target" position={Position.Top} id="top" />
-            ) : null}
-            {sourcePosition === "right" ? (
-              <Handle type="source" position={Position.Right} id="right" />
-            ) : null}
-            {targetPosition === "right" ? (
-              <Handle type="target" position={Position.Right} id="right" />
-            ) : null}
-          </>
+          <Handle type="source" position={Position.Top} id="top" />
+          <Handle type="source" position={Position.Right} id="right" />
+          <Handle type="source" position={Position.Bottom} id="bottom" />
+          <Handle type="source" position={Position.Left} id="left" />
           {data.group ? (
             <div className="font-bold text-gray-500">CG: {data.group}</div>
           ) : null}
