@@ -57,7 +57,6 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
   const height = useMemo(() => getHeight(), [size]);
   const rounded = useMemo(() => getRounded(), [round]);
   const horizontalPadding = useMemo(() => getHorizontalPadding(), [size]);
-  console.log(height, rounded, horizontalPadding);
   return (
     <button
       className={

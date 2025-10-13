@@ -25,18 +25,18 @@ import { CustomButton } from "./CustomButton";
 import { SaveIcon } from "./icons/SaveIcon";
 import RevertArrowIcon from "./icons/RevertArrowIcon";
 import ClockwiseArrowIcon from "./icons/ClockwiseArrowIcon";
-import { RollUpProvider } from "../context/RollUpContext";
 import useUndoRedo from "./hooks/useUndoRedo";
-import getTestDiagramData from "../common/getTestDiagramData";
 import useVersions from "./hooks/useVersions";
 import compareEdgesData from "../common/compareEdgesData";
 import compareNodesData from "../common/compareNodesData";
 import useDraggable from "./hooks/useDraggable";
 import useDirection from "./hooks/useDirection";
 import useCachedDiagramData from "./hooks/useCachedDiagramData";
+import getAncestors from "../common/getAncestors";
+import { RollProvider } from "../context/RollContext";
 
 const LayoutFlow = () => {
-  const { setNodes, setEdges, setViewport, getNode } = useReactFlow();
+  const { setNodes, setEdges, setViewport } = useReactFlow();
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance<
     Node,
     Edge
@@ -131,63 +131,89 @@ const LayoutFlow = () => {
     [rfInstance]
   );
 
-  const onRollupClick = useCallback(
-    (nodeId: string) => {
-      const isCollapsed = getNode(nodeId)?.data?.collapsed;
-      const children = getChildrenRecursive(nodeId);
-      if (children.length === 0) return; // no children to hide/show
+  function rollUp(nodeId: string) {
+    console.log("rollUp");
+    const ancestors = getAncestors(nodeId, rfInstance?.getEdges() || []);
 
-      if (isCollapsed) {
-        // Expand node
-        setNodes((nds) =>
-          nds.map((n) => {
-            if (n.id === nodeId) {
-              return { ...n, data: { ...n.data, collapsed: false } };
-            }
-            if (children.includes(n.id)) {
-              return { ...n, hidden: false };
-            }
-            return n;
-          })
-        );
+    const visibleIds = new Set([nodeId, ...ancestors]);
 
-        setEdges((eds) =>
-          eds.map((e) =>
-            children.includes(e.source) || children.includes(e.target)
-              ? { ...e, hidden: false }
-              : e
-          )
-        );
-      } else {
-        // Collapse node
-        setNodes((nds) =>
-          nds.map((n) => {
-            if (n.id === nodeId) {
-              return { ...n, data: { ...n.data, collapsed: true } };
-            }
-            if (children.includes(n.id)) {
-              return { ...n, hidden: true };
-            }
-            return n;
-          })
-        );
+    const collapsedIds = rfInstance?.getNodes()
+      ? new Set(
+          rfInstance
+            ?.getNodes()
+            .filter((n) => !visibleIds.has(n.id))
+            .map((n) => n.id)
+        )
+      : new Set<string>();
 
-        setEdges((eds) =>
-          eds.map((e) =>
-            children.includes(e.source) || children.includes(e.target)
-              ? { ...e, hidden: true }
-              : e
-          )
-        );
-      }
-      onSave();
-    },
-    [getNode, getChildrenRecursive, onSave, setNodes, setEdges, rfInstance, id]
-  );
+    setNodes((nodes) =>
+      nodes.map((n) => {
+        if (n.id === nodeId) {
+          return {
+            ...n,
+            data: {
+              ...n.data,
+              collapsed: collapsedIds,
+            },
+            hidden: false,
+          };
+        } else {
+          return {
+            ...n,
+            hidden: collapsedIds.has(n.id) || n.hidden,
+          };
+        }
+      })
+    );
 
-  const handleRollUp = (nodeId: string) => {
-    onRollupClick(nodeId);
-  };
+    setEdges((edges) =>
+      edges.map((e) => ({
+        ...e,
+        hidden: (collapsedIds.has(e.target) || collapsedIds.has(e.source)) || e.hidden,
+      }))
+    );
+  }
+
+  function rollDown(nodeId: string) {
+    console.log("rollDown");
+    const node = rfInstance?.getNode(nodeId);
+
+    if (node) {
+      const collapsedIds = node.data.collapsed
+        ? (node.data.collapsed as Set<string>)
+        : new Set<string>();
+      setNodes((nodes) =>
+        nodes.map((n) => {
+          if (nodeId === n.id) {
+            return {
+              ...n,
+              data: {
+                ...n.data,
+                collapsed: new Set<string>(),
+              }
+            }
+          } else {
+            return {
+          ...n,
+          hidden: n.hidden && collapsedIds.has(n.id) ? false : n.hidden,
+        }
+          }
+        })
+      );
+
+      collapsedIds.add(nodeId);
+
+      setEdges((edges) =>
+        edges.map((e) => ({
+          ...e,
+          hidden:
+            e.hidden && collapsedIds.has(e.source) || collapsedIds.has(e.target)
+              ? false
+              : e.hidden,
+        }))
+      );
+    }
+  }
 
   useEffect(() => {
     if (id) {
@@ -195,12 +221,12 @@ const LayoutFlow = () => {
     }
   }, [direction]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      const data = getTestDiagramData();
-      handleSelectFile(data);
-    }, 1000);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     const data = getTestDiagramData();
+  //     handleSelectFile(data);
+  //   }, 1000);
+  // }, []);
 
   useEffect(() => {
     if (rfInstance && id) {
@@ -211,7 +237,7 @@ const LayoutFlow = () => {
   }, [id]);
 
   return (
-    <RollUpProvider onRollUp={handleRollUp}>
+    <RollProvider onRollUp={rollUp} onRollDown={rollDown}>
       <ReactFlow
         defaultNodes={[]}
         defaultEdges={[]}
@@ -292,7 +318,7 @@ const LayoutFlow = () => {
         <Controls className="bg-white" onInteractiveChange={setDraggable} />
         <LoadingOverlay />
       </ReactFlow>
-    </RollUpProvider>
+    </RollProvider>
   );
 };
 

@@ -11,15 +11,14 @@ import getLinearGradientFromColorsArray from "../common/getLinearGradientFromCol
 import { CustomButton } from "./CustomButton";
 import PlusIcon from "./icons/PlusIcon";
 import MinusIcon from "./icons/MinusIcon";
-import { useRollUp } from "../context/RollUpContext";
+import { useRoll } from "../context/RollContext";
 
 const CustomNode = (props: NodeProps<CustomNodeProps>) => {
   const { data, id, sourcePosition, targetPosition } = props;
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(data.collapsed || false);
   const [label, setLabel] = useState<string | ReactNode>(data.label);
   const updateNodeInternals = useUpdateNodeInternals();
 
-  const handleCollapse = useRollUp();
+  const { onRollDown, onRollUp } = useRoll();
 
   useEffect(() => {
     updateNodeInternals(id);
@@ -108,13 +107,17 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
           ) : null}
         </div>
         <CustomButton
-          label={isCollapsed ? <PlusIcon /> : <MinusIcon />}
+          label={data.collapsed?.size ? <PlusIcon /> : <MinusIcon />}
           size="sm"
           className="border"
           round
           onClick={() => {
-            handleCollapse(id);
-            setIsCollapsed((prev) => !prev);
+            console.log(data.collapsed);
+            if (data.collapsed?.size) {
+              onRollDown(id);
+            } else {
+              onRollUp(id);
+            }
           }}
         />
       </div>
