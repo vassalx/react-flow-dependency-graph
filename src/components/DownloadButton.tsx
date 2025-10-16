@@ -224,6 +224,8 @@ const DownloadButton = ({ id }: DownloadButtonProps) => {
       const cellWidth = scaledDiagramWidth / cols;
       const cellHeight = scaledDiagramHeight / rows;
 
+      pagesRendered = 0;
+
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
           const pageNumber = r * cols + c + 2;
@@ -242,8 +244,10 @@ const DownloadButton = ({ id }: DownloadButtonProps) => {
             continue;
           }
 
+          pagesRendered += 1;
+
           // Add the page number in the center of the cell
-          const textString = String(pageNumber);
+          const textString = String(pagesRendered + 1);
           const textWidth =
             pdf.getStringUnitWidth(textString) * pdf.getFontSize();
           const textHeight = pdf.getFontSize();
