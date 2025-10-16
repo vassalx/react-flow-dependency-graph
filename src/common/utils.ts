@@ -20,7 +20,6 @@ function getParams(nodeA: any, nodeB: any) {
   }
  
   const [x, y] = getHandleCoordsByPosition(nodeA, position);
-  console.log(x,y, centerA);
   return [x, y, position];
 }
  
