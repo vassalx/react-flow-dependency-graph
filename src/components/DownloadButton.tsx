@@ -40,7 +40,7 @@ const DownloadButton = ({ id }: DownloadButtonProps) => {
   };
 
   const handleSavePdf = async () => {
-    const nodesBounds = getNodesBounds(getNodes());
+    const nodesBounds = getNodesBounds(getNodes().filter((node) => !node.hidden));
 
     const viewElement = document.querySelector<HTMLElement>(
       ".react-flow__viewport"

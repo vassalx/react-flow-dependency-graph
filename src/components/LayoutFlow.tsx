@@ -14,7 +14,7 @@ import {
 
 import "@xyflow/react/dist/style.css";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { DiagramData, edgeTypes, nodeTypes } from "../common/types";
 import DownloadButton from "./DownloadButton";
 import SelectExample from "./SelectExample";
@@ -35,6 +35,9 @@ import useDirection from "./hooks/useDirection";
 import useCachedDiagramData from "./hooks/useCachedDiagramData";
 import getAncestors from "../common/getAncestors";
 import { RollProvider } from "../context/RollContext";
+import jsPDF from "jspdf";
+
+const pagePadding = 20; // pt (jsPDF units)
 
 const LayoutFlow = () => {
   const { setNodes, setEdges, setViewport } = useReactFlow();
@@ -62,6 +65,9 @@ const LayoutFlow = () => {
   } = useVersions({ rfInstance, id });
   const { draggable, setDraggable } = useDraggable();
   const { getCachedDiagramData, setCachedDiagramData } = useCachedDiagramData();
+  const [bgOffset, setBgOffset] = useState<[number, number]>([0, 0]);
+
+  const nodes = rfInstance?.getNodes();
 
   const updateELKLayout = async (oldNodes: Node[], oldEdges: Edge[]) => {
     const { nodes, edges } = await getElkLayout(oldNodes, oldEdges, direction);
@@ -166,7 +172,7 @@ const LayoutFlow = () => {
 
       setCachedDiagramData(newData, id);
     }
-  }
+  };
 
   const rollDown = (nodeId: string) => {
     const node = rfInstance?.getNode(nodeId);
@@ -213,7 +219,7 @@ const LayoutFlow = () => {
 
       setCachedDiagramData(newData, id);
     }
-  }
+  };
 
   useEffect(() => {
     if (id) {
@@ -236,6 +242,36 @@ const LayoutFlow = () => {
     }
   }, [id]);
 
+  useEffect(() => {
+    handleMove();
+  }, [nodes]);
+
+  const { contentWidth, contentHeight } = useMemo(() => {
+    const pdf = new jsPDF("l", "pt", "a4");
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+
+    // The available area for diagram content on a single content page
+    const contentWidth = pageWidth - pagePadding * 2;
+    const contentHeight = pageHeight - pagePadding * 2;
+    return { contentWidth, contentHeight };
+  }, []);
+
+  const handleMove = useCallback(() => {
+    if (rfInstance) {
+      const currentNodes = rfInstance.getNodes().filter((node) => !node.hidden);
+      if (currentNodes.length === 0) return;
+
+      const minX = Math.min(...currentNodes.map((n) => n.position.x));
+      const minY = Math.min(...currentNodes.map((n) => n.position.y));
+
+      setBgOffset([
+        Math.abs(contentWidth - (minX + contentWidth / 2)),
+        Math.abs(contentHeight - (minY + contentHeight / 2)),
+      ]);
+    }
+  }, [rfInstance]);
+
   return (
     <RollProvider onRollUp={rollUp} onRollDown={rollDown}>
       <ReactFlow
@@ -256,7 +292,11 @@ const LayoutFlow = () => {
         elementsSelectable={draggable}
         connectionMode={ConnectionMode.Loose}
       >
-        <Background variant={BackgroundVariant.Lines} gap={50} />
+        <Background
+          variant={BackgroundVariant.Lines}
+          gap={[contentWidth, contentHeight]}
+          offset={bgOffset}
+        />
         <div className="hidden sm:block">
           <MiniMap pannable zoomable />
         </div>
