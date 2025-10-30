@@ -19,19 +19,22 @@ const useVersions = ({ rfInstance, id }: UseVersionsProps) => {
 
   const currentIdRef = useRef(id);
 
-  const saveVersion = () => {
+  const saveVersion = ({
+    newFlow,
+    hasPrompt,
+  }: { newFlow?: unknown; hasPrompt?: boolean } = {}) => {
     if (rfInstance && currentIdRef.current) {
-      const flow = rfInstance.toObject();
+      const flow = newFlow || rfInstance.toObject();
       const timestamp = new Date().toISOString();
-      let name = prompt(
-        "Enter version name (optional):",
-        new Date(timestamp).toLocaleString()
-      );
+      const dateName = new Date(timestamp).toLocaleString();
+      let name = hasPrompt
+        ? prompt("Enter version name (optional):", dateName)
+        : dateName;
       if (name === null) {
         return;
       }
       if (!name.trim()) {
-        name = new Date(timestamp).toLocaleString();
+        name = dateName;
       }
       const versionKey = `${localStorageRestoreKey}${localStorageVersionKey}${currentIdRef.current}_${timestamp}`;
       let updatedVersions = [
@@ -51,7 +54,7 @@ const useVersions = ({ rfInstance, id }: UseVersionsProps) => {
     }
   };
 
-    const selectVersion = (versionKey: string) => {
+  const selectVersion = (versionKey: string) => {
     const flow = getFlowVersion(versionKey);
     if (flow && rfInstance) {
       setSelectedVersion(versionKey);
@@ -70,7 +73,7 @@ const useVersions = ({ rfInstance, id }: UseVersionsProps) => {
       return flow;
     }
     return null;
-  }
+  };
 
   useEffect(() => {
     currentIdRef.current = id;
@@ -86,12 +89,20 @@ const useVersions = ({ rfInstance, id }: UseVersionsProps) => {
         return { key, date, name };
       });
       setVersions(
-        versionList.sort((a, b) => (a.date < b.date ? 1 : -1)).slice(0, MAX_VERSIONS_LIST_LENGTH)
+        versionList
+          .sort((a, b) => (a.date < b.date ? 1 : -1))
+          .slice(0, MAX_VERSIONS_LIST_LENGTH)
       );
     }
   }, [id, rfInstance]);
 
-  return { selectedVersion, versions, saveVersion, selectVersion, getFlowVersion };
+  return {
+    selectedVersion,
+    versions,
+    saveVersion,
+    selectVersion,
+    getFlowVersion,
+  };
 };
 
 export default useVersions;

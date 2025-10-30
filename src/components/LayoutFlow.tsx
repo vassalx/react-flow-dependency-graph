@@ -244,6 +244,9 @@ const LayoutFlow = () => {
 
   useEffect(() => {
     handleMove();
+    if (!versions.length && nodes?.length) {
+      saveVersion({ hasPrompt: false });
+    }
   }, [nodes]);
 
   const { contentWidth, contentHeight } = useMemo(() => {
@@ -319,8 +322,14 @@ const LayoutFlow = () => {
                   }
                 }}
               >
-                <option value="">Restore version...</option>
-                {versions.map((v) => (
+                <option
+                  value={
+                    versions.length ? versions[versions.length - 1].key : ""
+                  }
+                >
+                  Restore version...
+                </option>
+                {versions.slice(0, -1).map((v) => (
                   <option key={v.key} value={v.key}>
                     {v.name || new Date(v.date).toLocaleString()}
                   </option>
