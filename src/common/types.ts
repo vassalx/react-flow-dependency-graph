@@ -5,6 +5,7 @@ import {
   EdgeTypes,
   Node,
   NodeTypes,
+  Viewport,
 } from "@xyflow/react";
 import CustomEdge from "../components/CustomEdge";
 import CustomNode from "../components/CustomNode";
@@ -16,6 +17,7 @@ export type EdgeLineType = "solid" | "dotted" | "dashed" | "solid-dotted";
 export interface DiagramData {
   edges: Edge[];
   nodes: Node[];
+  viewport?: Viewport;
   id?: string;
   legend?: { [key: string]: string };
 }
@@ -30,6 +32,7 @@ export type CustomNodeProps = Node<
     selected?: boolean;
     type?: string
     borderStyle?: string;
+    collapsed?: string[];
   },
   "custom"
 >;

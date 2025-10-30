@@ -12,6 +12,7 @@ export default function DiagramLegend({ items }: DiagramLegendProps) {
       </div>
       {Object.keys(items).map((key) => (
         <div
+          key={key}
           className="p-2 rounded-xl border border-dashed bg-gray-100 flex-auto"
           style={{
             borderColor: items[key],

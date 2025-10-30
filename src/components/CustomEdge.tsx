@@ -2,10 +2,12 @@ import {
   EdgeLabelRenderer,
   BaseEdge,
   type EdgeProps,
-  getSimpleBezierPath,
+  useInternalNode,
+  getBezierPath,
 } from "@xyflow/react";
 import { CustomEdgeProps } from "../common/types";
 import { ReactNode } from "react";
+import { getEdgeParams } from "../common/utils";
 
 interface EdgeLabelProps {
   transform?: string;
@@ -45,6 +47,8 @@ const CustomEdge = (props: EdgeProps<CustomEdgeProps>) => {
     targetPosition,
     targetHandleId,
     sourceHandleId,
+    source,
+    target,
     label,
     data,
     selectable, // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -52,13 +56,26 @@ const CustomEdge = (props: EdgeProps<CustomEdgeProps>) => {
     pathOptions, // eslint-disable-line @typescript-eslint/no-unused-vars
     ...edgeProps
   } = props;
-  const [edgePath, labelX, labelY] = getSimpleBezierPath({
-    sourceX,
-    sourceY,
-    sourcePosition,
-    targetX,
-    targetY,
-    targetPosition,
+
+    const sourceNode = useInternalNode(source);
+    const targetNode = useInternalNode(target);
+  
+    if (!sourceNode || !targetNode) {
+      return null;
+    }
+
+    const { sx, sy, tx, ty, sourcePos, targetPos } = getEdgeParams(
+      sourceNode,
+      targetNode,
+    );
+
+  const [edgePath, labelX, labelY] = getBezierPath({
+    sourceX: sx,
+    sourceY: sy,
+    sourcePosition: sourcePos,
+    targetX: tx,
+    targetY: ty,
+    targetPosition: targetPos,
   });
 
   const getTranslateSourceHandle = () => {

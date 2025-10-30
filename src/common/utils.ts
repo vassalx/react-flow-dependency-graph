@@ -19,15 +19,29 @@ function getParams(nodeA: any, nodeB: any) {
     position = centerA.y > centerB.y ? Position.Top : Position.Bottom;
   }
  
-  const [x, y] = getHandleCoordsByPosition(nodeA);
+  const [x, y] = getHandleCoordsByPosition(nodeA, position);
   return [x, y, position];
 }
  
-function getHandleCoordsByPosition(node: any) {
-  const x = node.internals.positionAbsolute.x + node.measured.width/2;
-  const y = node.internals.positionAbsolute.y + node.measured.height/2;
- 
-  return [x, y];
+function getHandleCoordsByPosition(node: any, handlePosition: Position) {
+  const x = node.internals.positionAbsolute.x;
+  const y = node.internals.positionAbsolute.y;
+  const width = node.measured.width;
+  const height = node.measured.height;
+
+  switch (handlePosition) {
+    case Position.Left:
+      return [x, y + height / 2];
+    case Position.Right:
+      return [x + width, y + height / 2];
+    case Position.Top:
+      return [x + width / 2, y];
+    case Position.Bottom:
+      return [x + width / 2, y + height];
+    default:
+      // fallback to center if unknown
+      return [x + width / 2, y + height / 2];
+  }
 }
  
 function getNodeCenter(node: any) {
