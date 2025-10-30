@@ -73,7 +73,7 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
           </div>
         ) : null}
 
-        <div className="flex flex-col flex-1" onClick={handleNodeClick}>
+        <div className="flex flex-col flex-1 [word-break:break-word]" onClick={handleNodeClick}>
           {label}
           <Handle type="source" position={Position.Top} id="top" />
           <Handle type="source" position={Position.Right} id="right" />

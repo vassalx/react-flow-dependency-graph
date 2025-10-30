@@ -183,22 +183,14 @@ const LayoutFlow = () => {
       );
       const nodes = rfInstance.getNodes();
       const edges = rfInstance.getEdges();
-      const newNodes = nodes.map((n) => {
-        if (nodeId === n.id) {
-          return {
-            ...n,
-            data: {
-              ...n.data,
-              collapsed: [],
-            },
-          };
-        } else {
-          return {
-            ...n,
-            hidden: n.hidden && collapsedIds.has(n.id) ? false : n.hidden,
-          };
-        }
-      });
+      const newNodes = nodes.map((n) => ({
+        ...n,
+        hidden: n.hidden && collapsedIds.has(n.id) ? false : n.hidden,
+        data: {
+          ...n.data,
+          collapsed: [],
+        },
+      }));
       setNodes(newNodes);
 
       collapsedIds.add(nodeId);

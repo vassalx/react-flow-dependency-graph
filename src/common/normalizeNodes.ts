@@ -5,10 +5,10 @@ const normalizeNodes = (nodes: CustomNodeProps[]): Node[] => {
   return nodes.map((node) => ({
     type: "custom",
     style: {
-      minWidth: 150,
-      maxWidth: 200,
+      minWidth: 200,
+      maxWidth: 250,
     },
-    width: 150,
+    width: 200,
     handles: [{ x: 0, y: 0, position: "left" as Position, type: "source" }],
     ...node,
     position: node.position || { x: 0, y: 0 },

@@ -48,7 +48,7 @@ const getElkLayout = async (
         "layering.layerConstraint":
           (node.data && node.data.type === "person") ? "FIRST" : "",
       },
-      width: 200,
+      width: 250,
     })),
     edges: edges.map((edge) => ({
       id: edge.id,
