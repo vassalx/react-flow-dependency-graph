@@ -51,7 +51,9 @@ const useVersions = ({ rfInstance, id }: UseVersionsProps) => {
       localStorage.setItem(versionKey, JSON.stringify({ flow, name }));
       setSelectedVersion(versionKey);
       setVersions(updatedVersions);
-      toast.success("Version saved!");
+      if (hasPrompt) {
+        toast.success("Version saved!");
+      }
     }
   };
 
