@@ -19,10 +19,11 @@ const useVersions = ({ rfInstance, id }: UseVersionsProps) => {
 
   const currentIdRef = useRef(id);
 
-  const saveVersion = ({
-    newFlow,
-    hasPrompt,
-  }: { newFlow?: unknown; hasPrompt?: boolean } = {}) => {
+  const saveVersion = (
+    { newFlow, hasPrompt }: { newFlow?: unknown; hasPrompt?: boolean } = {
+      hasPrompt: true,
+    }
+  ) => {
     if (rfInstance && currentIdRef.current) {
       const flow = newFlow || rfInstance.toObject();
       const timestamp = new Date().toISOString();
