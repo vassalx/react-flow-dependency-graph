@@ -98,7 +98,7 @@ const LayoutFlow = () => {
       setViewport({ x, y, zoom });
     } else if (data) {
       const { nodes, edges } = await updateELKLayout(data.nodes, data.edges);
-      setCachedDiagramData(data, data.id || id);
+      setCachedDiagramData({ ...data, nodes, edges }, data.id || id);
       resetUndoRedoState({ nodes: nodes || [], edges: edges || [] });
     }
   };
