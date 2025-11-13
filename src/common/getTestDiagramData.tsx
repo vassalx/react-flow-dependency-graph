@@ -135,12 +135,12 @@ const getTestDiagramData = (): DiagramData => {
     edges: normalizeEdges(edges),
     nodes: normalizeNodes(
       addColorsToNodes(nodes, {
-        "1": "blue",
+        "1": "hsl(228, 45%, 80%)",
       })
     ),
     id: "1",
     legend: {
-      "1": "blue",
+      "1": "hsl(228, 45%, 80%)",
     },
   };
 };

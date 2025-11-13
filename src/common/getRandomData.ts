@@ -111,7 +111,7 @@ const getRandomData = (nodeCount: number) => {
     nodes: normalizeNodes(nodes as CustomNodeProps[]),
     id: "1",
     legend: {
-      "1": "blue",
+      "1": "hsl(228, 45%, 80%)",
     },
   };
 };
