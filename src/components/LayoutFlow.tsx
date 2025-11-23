@@ -36,6 +36,7 @@ import useCachedDiagramData from "./hooks/useCachedDiagramData";
 import getAncestors from "../common/getAncestors";
 import { RollProvider } from "../context/RollContext";
 import jsPDF from "jspdf";
+import getChildren from "../common/getChildren";
 
 const pagePadding = 20; // pt (jsPDF units)
 
@@ -121,7 +122,61 @@ const LayoutFlow = () => {
     }
   };
 
-  const rollUp = (nodeId: string) => {
+  const rollUpChildren = (nodeId: string) => {
+    if (rfInstance) {
+      const ancestors = getChildren(nodeId, rfInstance?.getEdges() || []);
+
+      const visibleIds = new Set([nodeId, ...ancestors]);
+
+      const collapsedIds = rfInstance?.getNodes()
+        ? new Set(
+            rfInstance
+              ?.getNodes()
+              .filter((n) => !visibleIds.has(n.id))
+              .map((n) => n.id)
+          )
+        : new Set<string>();
+      
+
+      const nodes = rfInstance?.getNodes() || [];
+      const edges = rfInstance?.getEdges() || [];
+
+      const newNodes = nodes.map((n) => {
+        if (n.id === nodeId) {
+          return {
+            ...n,
+            data: {
+              ...n.data,
+              collapsedChildren: Array.from(collapsedIds.values()),
+            },
+            hidden: false,
+          };
+        } else {
+          return {
+            ...n,
+            hidden: collapsedIds.has(n.id) || n.hidden,
+          };
+        }
+      });
+
+      const newEdges = edges.map((e) => ({
+        ...e,
+        hidden:
+          collapsedIds.has(e.target) || collapsedIds.has(e.source) || e.hidden,
+      }));
+
+      setNodes(newNodes);
+      setEdges(newEdges);
+
+      const newData = rfInstance.toObject();
+      newData.edges = newEdges;
+      newData.nodes = newNodes;
+
+      setCachedDiagramData(newData, id);
+    }
+  };
+
+  const rollUpAncestors = (nodeId: string) => {
     if (rfInstance) {
       const ancestors = getAncestors(nodeId, rfInstance?.getEdges() || []);
 
@@ -145,7 +200,7 @@ const LayoutFlow = () => {
             ...n,
             data: {
               ...n.data,
-              collapsed: Array.from(collapsedIds.values()),
+              collapsedAncestors: Array.from(collapsedIds.values()),
             },
             hidden: false,
           };
@@ -178,9 +233,10 @@ const LayoutFlow = () => {
     const node = rfInstance?.getNode(nodeId);
 
     if (rfInstance && node) {
-      const collapsedIds = new Set<string>(
-        node.data.collapsed ? (node.data.collapsed as string[]) : []
-      );
+      const collapsedIds = new Set<string>([
+        ...(node.data?.collapsedAncestors || []) as string[],
+        ...(node.data?.collapsedChildren || []) as string[],
+      ]);
       const nodes = rfInstance.getNodes();
       const edges = rfInstance.getEdges();
       const newNodes = nodes.map((n) => ({
@@ -188,7 +244,8 @@ const LayoutFlow = () => {
         hidden: n.hidden && collapsedIds.has(n.id) ? false : n.hidden,
         data: {
           ...n.data,
-          collapsed: [],
+          collapsedAncestors: [],
+          collapsedChildren: [],
         },
       }));
       setNodes(newNodes);
@@ -268,7 +325,12 @@ const LayoutFlow = () => {
   }, [rfInstance]);
 
   return (
-    <RollProvider onRollUp={rollUp} onRollDown={rollDown}>
+    <RollProvider
+      onRollUpChildren={rollUpChildren}
+      onRollUpAncestors={rollUpAncestors}
+      onRollDownChildren={rollDown}
+      onRollDownAncestors={rollDown}
+    >
       <ReactFlow
         defaultNodes={[]}
         defaultEdges={[]}

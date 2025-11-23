@@ -7,7 +7,7 @@ const getAncestors = (nodeId: string, edges: Edge[]) => {
   while (queue.length) {
     const current = queue.shift();
     for (const edge of edges) {
-      if (edge.target === current && !parents.has(edge.source)) {
+      if (!edge.hidden && edge.target === current && !parents.has(edge.source)) {
         parents.add(edge.source);
         queue.push(edge.source);
       }

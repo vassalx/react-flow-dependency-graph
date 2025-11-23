@@ -5,8 +5,10 @@ export type RollHandler = (nodeId: string) => void;
 
 // 2️⃣ Define the context shape
 interface RollContextType {
-  onRollUp: RollHandler;
-  onRollDown: RollHandler;
+  onRollUpChildren: RollHandler;
+  onRollUpAncestors: RollHandler;
+  onRollDownChildren: RollHandler;
+  onRollDownAncestors: RollHandler;
 }
 
 // 3️⃣ Create context with default undefined
@@ -14,19 +16,23 @@ const RollContext = createContext<RollContextType | undefined>(undefined);
 
 // 4️⃣ Provider props
 interface RollProviderProps {
-  onRollUp: RollHandler;
-  onRollDown: RollHandler;
+  onRollUpChildren: RollHandler;
+  onRollUpAncestors: RollHandler;
+  onRollDownChildren: RollHandler;
+  onRollDownAncestors: RollHandler;
   children: ReactNode;
 }
 
 // 5️⃣ Provider component
 export const RollProvider: React.FC<RollProviderProps> = ({
-  onRollUp,
-  onRollDown,
+  onRollUpChildren,
+  onRollUpAncestors,
+  onRollDownChildren,
+  onRollDownAncestors,
   children,
 }) => {
   return (
-    <RollContext.Provider value={{ onRollUp, onRollDown }}>
+    <RollContext.Provider value={{ onRollUpChildren, onRollUpAncestors, onRollDownChildren, onRollDownAncestors }}>
       {children}
     </RollContext.Provider>
   );

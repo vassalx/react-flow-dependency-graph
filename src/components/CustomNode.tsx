@@ -13,13 +13,20 @@ import PlusIcon from "./icons/PlusIcon";
 import MinusIcon from "./icons/MinusIcon";
 import { useRoll } from "../context/RollContext";
 import changeHSL from "../common/changeHSL";
+import UserUpIcon from "./icons/UserUp";
+import UserDownIcon from "./icons/UserDown";
 
 const CustomNode = (props: NodeProps<CustomNodeProps>) => {
   const { data, id, sourcePosition, targetPosition } = props;
   const [label, setLabel] = useState<string | ReactNode>(data.label);
   const updateNodeInternals = useUpdateNodeInternals();
 
-  const { onRollDown, onRollUp } = useRoll();
+  const {
+    onRollDownChildren,
+    onRollDownAncestors,
+    onRollUpChildren,
+    onRollUpAncestors,
+  } = useRoll();
 
   useEffect(() => {
     updateNodeInternals(id);
@@ -68,8 +75,6 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
 
   const borderColor = useMemo(() => getBorderColor(props), [props]);
 
-  console.log(backgroundColor, borderColor);
-
   return (
     <div
       style={{
@@ -93,7 +98,27 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
             <UserIcon />
           </div>
         ) : null}
-
+        <div className="flex flex-col items-center justify-center gap-1">
+          <UserUpIcon />
+          <CustomButton
+            label={
+              data.collapsedAncestors?.length ? <PlusIcon /> : <MinusIcon />
+            }
+            size="xs"
+            className="border"
+            round="full"
+            onClick={() => {
+              if (data.collapsedAncestors?.length) {
+                onRollDownAncestors(id);
+              } else {
+                onRollDownAncestors(id);
+                setTimeout(() => {
+                  onRollUpAncestors(id);
+                }, 0);
+              }
+            }}
+          />
+        </div>
         <div
           className="flex flex-col flex-1 [word-break:break-word]"
           onClick={handleNodeClick}
@@ -107,19 +132,27 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
             <div className="font-bold text-gray-500">CG: {data.group}</div>
           ) : null}
         </div>
-        <CustomButton
-          label={data.collapsed?.length ? <PlusIcon /> : <MinusIcon />}
-          size="xs"
-          className="border"
-          round="full"
-          onClick={() => {
-            if (data.collapsed?.length) {
-              onRollDown(id);
-            } else {
-              onRollUp(id);
+        <div className="flex flex-col items-center justify-center gap-1">
+          <UserDownIcon />
+          <CustomButton
+            label={
+              data.collapsedChildren?.length ? <PlusIcon /> : <MinusIcon />
             }
-          }}
-        />
+            size="xs"
+            className="border"
+            round="full"
+            onClick={() => {
+              if (data.collapsedChildren?.length) {
+                onRollDownChildren(id);
+              } else {
+                onRollDownChildren(id);
+                setTimeout(() => {
+                  onRollUpChildren(id);
+                }, 0);
+              }
+            }}
+          />
+        </div>
       </div>
     </div>
   );

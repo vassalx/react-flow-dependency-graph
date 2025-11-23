@@ -9,14 +9,14 @@ const compareNodesData = (nodesA: Node[], nodesB: Node[]) => {
     .sort((a1, b1) => a1.id.localeCompare(b1.id))
     .map((node) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { collapsed, ...rest } = node.data;
+      const { collapsedChildren, collapsedAncestors, ...rest } = node.data;
       return { id: node.id, data: rest };
     });
   const a2 = nodesB
     .sort((a1, b1) => a1.id.localeCompare(b1.id))
     .map((node) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { collapsed, ...rest } = node.data;
+      const { collapsedChildren, collapsedAncestors,  ...rest } = node.data;
       return { id: node.id, data: rest };
     });
 
