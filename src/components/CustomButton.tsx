@@ -31,7 +31,7 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
   round = "md",
 }) => {
   const heightMap = {
-    xs: "h-4",
+    xs: "h-6",
     sm: "h-8",
     md: "h-10",
     lg: "h-12",
@@ -43,7 +43,7 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
   };
 
   const paddingMap = {
-    xs: "w-4",
+    xs: "w-6",
     sm: "px-2",
     md: "px-4",
     lg: "px-6",

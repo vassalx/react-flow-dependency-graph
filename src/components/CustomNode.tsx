@@ -10,11 +10,10 @@ import UserIcon from "./icons/UserIcon";
 import getLinearGradientFromColorsArray from "../common/getLinearGradientFromColorsArray";
 import { CustomButton } from "./CustomButton";
 import PlusIcon from "./icons/PlusIcon";
-import MinusIcon from "./icons/MinusIcon";
 import { useRoll } from "../context/RollContext";
 import changeHSL from "../common/changeHSL";
-import UserUpIcon from "./icons/UserUp";
-import UserDownIcon from "./icons/UserDown";
+import { DiagramIcon } from "./icons/DiagramIcon";
+import { DiagramReverseIcon } from "./icons/DiagramReverseIcon";
 
 const CustomNode = (props: NodeProps<CustomNodeProps>) => {
   const { data, id, sourcePosition, targetPosition } = props;
@@ -98,7 +97,7 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
             <UserIcon />
           </div>
         ) : null}
-        <div className="flex flex-col items-center justify-center gap-1">
+        {/* <div className="flex flex-col items-center justify-center gap-1">
           <UserUpIcon />
           <CustomButton
             label={
@@ -118,7 +117,7 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
               }
             }}
           />
-        </div>
+        </div> */}
         <div
           className="flex flex-col flex-1 [word-break:break-word]"
           onClick={handleNodeClick}
@@ -132,27 +131,35 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
             <div className="font-bold text-gray-500">CG: {data.group}</div>
           ) : null}
         </div>
-        <div className="flex flex-col items-center justify-center gap-1">
-          <UserDownIcon />
-          <CustomButton
-            label={
-              data.collapsedChildren?.length ? <PlusIcon /> : <MinusIcon />
+        <CustomButton
+          label={
+            data.collapsedChildren?.length ? (
+              <DiagramIcon />
+            ) : data.collapsedAncestors?.length ? (
+              <DiagramReverseIcon />
+            ) : (
+              <PlusIcon />
+            )
+          }
+          size="xs"
+          className="border"
+          round="full"
+          onClick={() => {
+            if (data.collapsedChildren?.length) {
+              onRollDownChildren(id);
+              setTimeout(() => {
+                onRollUpAncestors(id);
+              }, 0);
+            } else if (data.collapsedAncestors?.length) {
+              onRollDownAncestors(id);
+            } else {
+              onRollDownChildren(id);
+              setTimeout(() => {
+                onRollUpChildren(id);
+              }, 0);
             }
-            size="xs"
-            className="border"
-            round="full"
-            onClick={() => {
-              if (data.collapsedChildren?.length) {
-                onRollDownChildren(id);
-              } else {
-                onRollDownChildren(id);
-                setTimeout(() => {
-                  onRollUpChildren(id);
-                }, 0);
-              }
-            }}
-          />
-        </div>
+          }}
+        />
       </div>
     </div>
   );
