@@ -37,6 +37,7 @@ import getAncestors from "../common/getAncestors";
 import { RollProvider } from "../context/RollContext";
 import jsPDF from "jspdf";
 import getChildren from "../common/getChildren";
+import getTestDiagramData from "../common/getTestDiagramData";
 
 const pagePadding = 20; // pt (jsPDF units)
 
@@ -276,12 +277,12 @@ const LayoutFlow = () => {
     }
   }, [direction]);
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     const data = getTestDiagramData();
-  //     handleSelectFile(data);
-  //   }, 1000);
-  // }, []);
+  useEffect(() => {
+    setTimeout(() => {
+      const data = getTestDiagramData();
+      handleSelectFile(data);
+    }, 1000);
+  }, []);
 
   useEffect(() => {
     if (rfInstance && id) {
